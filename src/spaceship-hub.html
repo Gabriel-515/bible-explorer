@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600&family=Atkinson+Hyperlegible:wght@400;700&family=Spectral:ital@1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Pixelify+Sans:wght@400;500;600&family=Atkinson+Hyperlegible:wght@400;700&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap">
 <style>
 :root{
   --night:#0d1024;--sky:#1b1440;--panel:#151a38;--panel-2:#1d2347;--line:#2c3260;
@@ -68,8 +68,8 @@ footer{font-size:13px;color:var(--muted)}
   </header>
 
   <div class="status">
-    <span class="gold" id="goldDisplay">✦ 150 Gold</span>
-    <span class="ch" id="chDisplay">◈ Genesis · Ch 11 / 50</span>
+    <span class="gold" id="goldDisplay">✦ 0 Gold</span>
+    <span class="ch" id="chDisplay">◈ Genesis · Ch 1 / 50</span>
     <span>Day 3</span>
   </div>
 
@@ -103,6 +103,7 @@ footer{font-size:13px;color:var(--muted)}
   <footer>Prototype. Tap anywhere on the floor to walk. Interact with glowing stations.</footer>
 </div>
 
+<script src="game-state.js"></script>
 <script>
 (function(){
 const $=id=>document.getElementById(id);
@@ -290,7 +291,8 @@ const SKINS=[
    legs2:["...wwww...","...wwww...","...dddd..."],
    sit:["..wwwwww..","..wvvvvw..","..wvGGvw..","..wvvvvw..","..wwwwww..",".gOOOOOOg.",".gwwwwwwg.",".gOOOOOOg.",".wwwwwwww."]}
 ];
-let currentSkin=0;
+let playerState=GameState.getState();
+let currentSkin=playerState.currentSkin;
 function getSkin(){return SKINS[currentSkin];}
 // Active palette merges skin-specific chars
 function getPAL(){return getSkin().pal;}
@@ -323,6 +325,14 @@ let screenGlow=0;
 let commandScreen={frame:0,scene:'babel'};
 let blinkLights=[];
 for(let i=0;i<6;i++)blinkLights.push({x:4+Math.random()*184,y:22+Math.random()*46,rate:1+Math.random()*3,phase:Math.random()*6.28,color:Math.random()>.5?GREEN:RED});
+
+function updateStatus(){
+  playerState=GameState.getState();
+  currentSkin=playerState.currentSkin;
+  $('goldDisplay').textContent=`✦ ${playerState.gold} Gold`;
+  $('chDisplay').textContent=`◈ Genesis · Ch ${playerState.currentChapter} / 50`;
+}
+updateStatus();
 
 // === HOTSPOT VISIBILITY ===
 const STATIONS={
@@ -512,8 +522,8 @@ function showMsg(who,text,cls){
 $('readerBtn').addEventListener('click',e=>{
   e.stopPropagation();sfxSelect();
   showMsg('Ship','Opening Ancient Text Reader... Genesis chapters loaded.','ship');
-  // In full game: opens the devotion-screen.html reading UI
-  setTimeout(()=>showMsg('System','[Bible Reading UI would open here — hybrid reader with Genesis chapters]','sys'),2000);
+  const chapter=GameState.get('currentChapter');
+  setTimeout(()=>{window.location.href=`devotion-screen.html?chapter=${chapter}`;},650);
 });
 
 $('commandBtn').addEventListener('click',e=>{
@@ -593,7 +603,9 @@ function showWardrobe(){
       card.appendChild(badge);
     }
     card.addEventListener('click',()=>{
-      currentSkin=idx;sfxSelect();
+      currentSkin=idx;
+      playerState=GameState.set('currentSkin',idx);
+      sfxSelect();
       showMsg('Explorer','Nice! The '+skin.name+' suit looks great.','');
       ov.remove();
     });

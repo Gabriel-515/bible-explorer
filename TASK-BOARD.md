@@ -2,6 +2,7 @@
 
 > Last updated: 2026-10-20
 > Status: Genesis Beta — Pre-Alpha
+> Codex: Milestone 1 engineering complete
 
 ---
 
@@ -26,20 +27,20 @@ Three AIs collaborate on this project. Each has a role:
 ## Milestone 1: Foundation (Current)
 
 ### Codex — Engineering
-- [ ] Create `src/game-state.js` — shared localStorage state module
+- [x] Create `src/game-state.js` — shared localStorage state module
   - Keys: readingStyle, currentSkin, gold, chaptersRead, currentChapter, bookmarks
   - try/catch wrapper for localStorage
-- [ ] Add Style B (Futuristic) reading mode to `src/devotion-screen.html`
+- [x] Add Style B (Futuristic) reading mode to `src/devotion-screen.html`
   - Dark bg, Lora font, cyan accents, scanline effects
   - Toggle button in header to switch B ↔ C
   - Persist choice via game-state
-- [ ] Wire hub → devotion screen navigation
+- [x] Wire hub → devotion screen navigation
   - Bible Reader station opens devotion-screen.html
   - "Back to Ship" button returns to hub
   - Pass chapter number via URL param or state
-- [ ] Persist wardrobe skin choice across page loads
-- [ ] Fix "Episode 1" label on babel-landing → "Scene 5 · Plain of Shinar"
-- [ ] Add Lora font to all HTML files
+- [x] Persist wardrobe skin choice across page loads
+- [x] Fix "Episode 1" label on babel-landing → "Scene 5 · Plain of Shinar"
+- [x] Add Lora font to all HTML files
 
 ### Gemini — Content
 - [ ] Generate `content/genesis-chapters.json` — all 50 Genesis chapters
@@ -87,6 +88,7 @@ Three AIs collaborate on this project. Each has a role:
 ---
 
 ## Completed
+- [x] Milestone 1 engineering foundation — shared state, dual reader styles, page navigation, and skin persistence (Codex)
 - [x] Spaceship hub with 5 stations + wardrobe (Claude)
 - [x] Tower of Babel exploration scene with full story (Claude)
 - [x] Devotion reading screen — Style C (Claude)

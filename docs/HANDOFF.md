@@ -106,10 +106,10 @@ The main home screen — Pokemon/Harvest Moon style interior. Side-view pixel ar
 
 **Canvas:** 192×108 logical pixels, nearest-neighbor scaled.
 
-### 2. Tower of Babel — Episode 1 (`babel-landing.html`)
+### 2. Tower of Babel — Scene 5 (`babel-landing.html`)
 **Published artifact:** https://claude.ai/artifact/1XiFj9gukmgPXzmEjtUaah
 
-The first exploration scene. Desert landscape with ancient tower ruins. Full story sequence with:
+The first exploration prototype, representing Scene 5 at the Plain of Shinar. Desert landscape with ancient tower ruins. Full story sequence with:
 - Landing animation (rocket flies in, astronaut tumbles out)
 - Exploration (walking, scanning ruins)
 - Relic discovery (ancient tablet)
@@ -246,7 +246,9 @@ Side-by-side comparison of all three reading styles (A: Ancient Scroll, B: Futur
 ### Built (Prototype/Working)
 - [x] Spaceship hub with walk-around, 5 interactive stations, wardrobe with 3 skins
 - [x] Tower of Babel exploration scene (full story sequence with transmitter + laser)
-- [x] Devotion reading screen (Style C with full Genesis 1 text, quiz, reflection)
+- [x] Devotion reading screen (Styles B/C with full Genesis 1 text, quiz, reflection)
+- [x] Shared local game state for reading style, skin, gold, chapter progress, and bookmarks
+- [x] Hub → Bible Reader navigation and Back to Ship flow
 - [x] Reading UI mockups (3 styles compared, B and C selected)
 - [x] 50-chapter devotion content JSON
 - [x] Game Design Document
@@ -254,14 +256,13 @@ Side-by-side comparison of all three reading styles (A: Ancient Scroll, B: Futur
 - [x] Procedural audio system (chiptune music + SFX)
 
 ### Needed (Next Steps)
-- [ ] **Dual reading style toggle** — wire Style B (Futuristic/Lora) alongside Style C (Hybrid/Spectral) with player choice
 - [ ] **Garden of Eden scene** (Scene 1) — first exploration location
 - [ ] **Mount Ararat scene** (Scene 2) — Noah's Ark location
 - [ ] **Remaining 8 exploration scenes** for Genesis episode
 - [ ] **Refactor to data-driven template** — babel-landing.html → reusable scene engine with JSON scene data
-- [ ] **Wire hub → reading → exploration flow** — Bible Reader station opens reading, Command Center launches missions with chapter gating
+- [ ] **Complete hub → exploration flow** — Command Center launches missions with chapter gating
 - [ ] **Full 50-chapter Bible text** — load all Genesis chapters (currently only Ch 1 is embedded)
-- [ ] **Save system** — localStorage or backend for progress, gold, unlocks, skin choice
+- [ ] **Expand save system** — current localStorage state works; add mission unlocks and any future backend sync
 - [ ] **Capacitor Android build** — wrap web app into APK
 - [ ] **Background music** — procedural ambient tracks per scene
 - [ ] **Tutorial/onboarding** — first-time player guidance
@@ -274,8 +275,9 @@ Side-by-side comparison of all three reading styles (A: Ancient Scroll, B: Futur
 | File | Description | Size |
 |------|-------------|------|
 | `spaceship-hub.html` | Main hub scene — walk-around spaceship interior | ~16KB |
-| `babel-landing.html` | Episode 1 exploration scene — Tower of Babel | ~25KB |
-| `devotion-screen.html` | Bible reading + devotion flow (Style C) | ~30KB |
+| `babel-landing.html` | Genesis Scene 5 exploration scene — Tower of Babel | ~25KB |
+| `devotion-screen.html` | Bible reading + devotion flow (Styles B/C) | ~30KB |
+| `game-state.js` | Shared localStorage state with in-memory fallback | ~3KB |
 | `genesis-devotions.json` | 50-chapter devotion content | ~15KB |
 | `project-brief.md` | Project brief document | ~5KB |
 | `reading-mockups.html` | 3 reading style comparison mockups | ~12KB |
@@ -302,8 +304,8 @@ All files are self-contained HTML with inline CSS/JS. No build step required. Op
 ## How to Continue Development
 
 1. **To add a new exploration scene:** Clone `babel-landing.html`, modify the `paintScene()` background function, update `story()` sequence, change the chapter requirements
-2. **To add reading styles:** The devotion-screen.html has Style C. Add a CSS class toggle for Style B using the Futuristic Tablet styles from reading-mockups.html
-3. **To wire the hub:** Replace the `showMsg('System', '[placeholder]')` calls in station click handlers with actual screen transitions (hide canvas, show reading/exploration UI)
+2. **To extend reading styles:** Reuse the existing `.style-futuristic` / `.style-hybrid` class toggle in `devotion-screen.html`
+3. **To wire more hub stations:** Replace each remaining placeholder station action with page navigation; Bible Reader is already connected
 4. **To add a new skin:** Add an entry to the `SKINS` array with `name`, `desc`, `pal` (palette object), `body`, `legs0/1/2`, `sit` sprite arrays
 5. **To build for Android:** Install Capacitor, create project, copy HTML files to www/, run `npx cap sync android && npx cap open android`
 

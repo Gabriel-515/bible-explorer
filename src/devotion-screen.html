@@ -1,6 +1,6 @@
 <title>Devotion Screen</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&family=Spectral:ital,wght@0,400;0,600;1,400&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Pixelify+Sans:wght@400;500;600&family=Atkinson+Hyperlegible:wght@400;700&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap">
 <style>
 /* Dark-first single-theme: game UI */
 :root {
@@ -41,6 +41,19 @@ body{
   min-height:100vh;
   display:flex;flex-direction:column;
 }
+.app-bar{
+  min-height:46px;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  font-family:'Pixelify Sans',cursive;font-size:0.72rem;
+  background:rgba(10,10,26,0.9);border-bottom:1px solid var(--frame-border);
+}
+.ship-back{
+  font:inherit;color:var(--holo);background:rgba(111,247,255,0.06);
+  border:1px solid rgba(111,247,255,0.2);border-radius:5px;padding:6px 10px;
+  cursor:pointer;
+}
+.ship-back:hover,.ship-back:focus-visible{background:rgba(111,247,255,0.14);outline:none}
+.reader-state{color:var(--muted)}
 
 /* All phases hidden by default */
 .phase{display:none;flex-direction:column;flex:1}
@@ -101,8 +114,9 @@ body{
   padding:16px 20px 12px;
   display:flex;justify-content:space-between;align-items:center;
   border-bottom:1px solid var(--frame-border);
-  position:sticky;top:env(safe-area-inset-top,0px);z-index:5;
+  position:sticky;top:0;z-index:5;gap:10px;flex-wrap:wrap;
 }
+.read-heading{display:flex;flex-direction:column;gap:2px}
 .read-header .title{
   font-family:'Pixelify Sans',cursive;
   color:var(--holo);font-size:1rem;
@@ -111,12 +125,24 @@ body{
   font-size:0.7rem;color:var(--muted);
   font-family:'Pixelify Sans',cursive;
 }
+.style-toggle{
+  display:flex;padding:2px;gap:2px;margin-left:auto;
+  background:#080f1d;border:1px solid rgba(111,247,255,0.2);border-radius:7px;
+}
+.style-option{
+  font-family:'Pixelify Sans',cursive;font-size:0.62rem;line-height:1;
+  color:var(--muted);background:transparent;border:0;border-radius:5px;
+  padding:6px 8px;cursor:pointer;
+}
+.style-option[aria-pressed="true"]{
+  color:#071318;background:var(--holo);box-shadow:0 0 12px rgba(111,247,255,0.25);
+}
+.style-option:focus-visible{outline:1px solid var(--holo);outline-offset:2px}
 .read-content{
   flex:1;padding:16px;
   display:flex;flex-direction:column;gap:0;
 }
 .reading-area{
-  background:var(--reading-bg);
   border-radius:10px;
   padding:24px 20px;
   box-shadow:0 0 30px rgba(255,232,192,0.06),
@@ -127,29 +153,67 @@ body{
   max-height:55vh;
   position:relative;
 }
-.reading-area::before{
+.reading-area > *{position:relative;z-index:1}
+.reading-area.style-hybrid{
+  background:var(--reading-bg);border-color:rgba(200,180,140,0.15);
+}
+.reading-area.style-hybrid::before{
   content:'';position:absolute;
   inset:0;border-radius:10px;
   opacity:0.06;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Ccircle cx='320' cy='420' r='60' fill='none' stroke='%23886644' stroke-width='1'/%3E%3Ccircle cx='320' cy='420' r='45' fill='none' stroke='%23886644' stroke-width='0.5'/%3E%3Cpath d='M50 480 Q80 440 60 400 Q40 360 70 330 Q90 310 75 280' fill='none' stroke='%23886644' stroke-width='1.2'/%3E%3Cpath d='M55 400 Q70 390 80 395' fill='none' stroke='%23886644' stroke-width='0.8'/%3E%3Cpath d='M65 370 Q50 365 45 370' fill='none' stroke='%23886644' stroke-width='0.8'/%3E%3Cpath d='M72 340 Q85 335 90 340' fill='none' stroke='%23886644' stroke-width='0.8'/%3E%3Ccircle cx='340' cy='80' r='4' fill='%23886644'/%3E%3Ccircle cx='360' cy='60' r='2' fill='%23886644'/%3E%3Ccircle cx='310' cy='50' r='3' fill='%23886644'/%3E%3Ccircle cx='370' cy='100' r='2.5' fill='%23886644'/%3E%3Ccircle cx='290' cy='70' r='1.5' fill='%23886644'/%3E%3Ccircle cx='350' cy='40' r='1.8' fill='%23886644'/%3E%3Ccircle cx='330' cy='110' r='2' fill='%23886644'/%3E%3Cpath d='M280 450 Q300 430 320 440 Q340 450 360 435' fill='none' stroke='%23886644' stroke-width='0.6' stroke-dasharray='4 3'/%3E%3Cpath d='M300 150 Q310 130 330 140' fill='none' stroke='%23886644' stroke-width='0.6'/%3E%3Cpath d='M310 140 L315 125 L320 138' fill='none' stroke='%23886644' stroke-width='0.5'/%3E%3C/svg%3E");
   background-size:cover;background-position:center;
 }
-.reading-area .verse{
+.reading-area.style-hybrid .verse{
   font-family:'Spectral',serif;
   color:var(--reading-fg);
   font-size:1rem;line-height:1.85;
   margin-bottom:8px;
 }
-.reading-area .vn{
+.reading-area.style-hybrid .vn{
   color:#b08a50;font-size:0.7rem;font-weight:600;
   vertical-align:super;margin-right:3px;
 }
-.reading-area .chapter-title{
+.reading-area.style-hybrid .chapter-title{
   font-family:'Pixelify Sans',cursive;
   color:var(--reading-muted);
   font-size:0.8rem;text-align:center;
   margin-bottom:16px;letter-spacing:0.1em;
   text-transform:uppercase;
+}
+.reading-area.style-futuristic{
+  background:#0c1828;border-color:rgba(111,247,255,0.3);
+  box-shadow:0 0 28px rgba(111,247,255,0.09),inset 0 0 24px rgba(111,247,255,0.035);
+}
+.reading-area.style-futuristic::before{
+  content:'';position:absolute;inset:0;border-radius:10px;pointer-events:none;
+  background:
+    linear-gradient(rgba(111,247,255,0.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(111,247,255,0.025) 1px,transparent 1px);
+  background-size:100% 5px,28px 100%;
+}
+.reading-area.style-futuristic::after{
+  content:'';position:absolute;inset:0;border-radius:10px;pointer-events:none;
+  background:linear-gradient(180deg,transparent 0%,rgba(111,247,255,0.08) 48%,transparent 52%);
+  background-size:100% 80px;animation:reader-scan 6s linear infinite;opacity:0.55;
+}
+@keyframes reader-scan{from{background-position:0 -80px}to{background-position:0 560px}}
+@media (prefers-reduced-motion:reduce){.reading-area.style-futuristic::after{animation:none}}
+.reading-area.style-futuristic .verse{
+  font-family:'Lora',serif;color:#c8d8e8;font-size:1rem;line-height:1.9;
+  margin-bottom:10px;text-shadow:0 0 8px rgba(111,247,255,0.035);
+}
+.reading-area.style-futuristic .verse + .verse{
+  border-top:1px solid rgba(111,247,255,0.08);padding-top:8px;
+}
+.reading-area.style-futuristic .vn{
+  color:var(--holo);font-size:0.7rem;font-weight:600;vertical-align:super;margin-right:4px;
+  text-shadow:0 0 8px rgba(111,247,255,0.45);
+}
+.reading-area.style-futuristic .chapter-title{
+  font-family:'Pixelify Sans',cursive;color:var(--holo);font-size:0.8rem;
+  text-align:center;margin-bottom:16px;letter-spacing:0.12em;text-transform:uppercase;
+  text-shadow:0 0 12px rgba(111,247,255,0.35);
 }
 .reading-toolbar{
   display:flex;gap:8px;justify-content:center;
@@ -414,6 +478,10 @@ body{
 <canvas id="bgCanvas"></canvas>
 
 <div class="screen">
+  <div class="app-bar">
+    <button class="ship-back" id="backToShipBtn" type="button">◀ Back to Ship</button>
+    <span class="reader-state" id="readerState">Genesis · Ch 1</span>
+  </div>
   <!-- PHASE 0: Boot -->
   <div id="bootPhase" class="phase active">
     <div class="laptop-icon">
@@ -428,11 +496,17 @@ body{
   <!-- PHASE 1: Reading -->
   <div id="readPhase" class="phase">
     <div class="read-header">
-      <span class="title" id="readTitle">◈ Genesis 1</span>
-      <span class="progress" id="readProgress">CH 1 / 50</span>
+      <div class="read-heading">
+        <span class="title" id="readTitle">◈ Genesis 1</span>
+        <span class="progress" id="readProgress">CH 1 / 50</span>
+      </div>
+      <div class="style-toggle" role="group" aria-label="Reading style">
+        <button class="style-option" id="futuristicStyleBtn" type="button" aria-pressed="false">Futuristic</button>
+        <button class="style-option" id="hybridStyleBtn" type="button" aria-pressed="true">Comfort</button>
+      </div>
     </div>
     <div class="read-content">
-      <div class="reading-area" id="readingArea">
+      <div class="reading-area style-hybrid" id="readingArea">
         <div class="chapter-title" id="chapterTitle">Creation of the World</div>
         <div id="verseContainer"></div>
       </div>
@@ -499,6 +573,7 @@ body{
   </div>
 </div>
 
+<script src="game-state.js"></script>
 <script>
 // === DEVOTION DATA (Genesis Ch.1 sample — full game loads from JSON) ===
 const devotionData = {
@@ -634,12 +709,49 @@ function drawBg(t) {
 requestAnimationFrame(drawBg);
 
 // === APP STATE ===
+const requestedChapter = Number(new URLSearchParams(window.location.search).get('chapter')) || GameState.get('currentChapter');
+const activeChapter = requestedChapter === devotionData.chapter ? requestedChapter : devotionData.chapter;
+let playerState = GameState.set('currentChapter', activeChapter);
 let currentPage = 0;
 const VERSES_PER_PAGE = 6;
 const totalPages = Math.ceil(verses.length / VERSES_PER_PAGE);
-let fontSize = 0; // 0=normal, 1=small, -1 is unused, 1=large
 const sizeClasses = ['', 'size-small', 'size-large'];
 let sizeIndex = 0;
+
+function applyReadingStyle(style) {
+  const readingStyle = style === 'futuristic' ? 'futuristic' : 'hybrid';
+  const area = document.getElementById('readingArea');
+  area.classList.toggle('style-futuristic', readingStyle === 'futuristic');
+  area.classList.toggle('style-hybrid', readingStyle === 'hybrid');
+  document.getElementById('futuristicStyleBtn').setAttribute('aria-pressed', String(readingStyle === 'futuristic'));
+  document.getElementById('hybridStyleBtn').setAttribute('aria-pressed', String(readingStyle === 'hybrid'));
+}
+
+function setReadingStyle(style) {
+  playerState = GameState.set('readingStyle', style);
+  applyReadingStyle(playerState.readingStyle);
+}
+
+function currentBookmark() {
+  return { chapter: devotionData.chapter, verse: currentPage * VERSES_PER_PAGE + 1 };
+}
+
+function isCurrentPageBookmarked() {
+  const bookmark = currentBookmark();
+  return playerState.bookmarks.some(item => item.chapter === bookmark.chapter && item.verse === bookmark.verse);
+}
+
+function updateBookmarkButton() {
+  document.getElementById('bookmarkBtn').textContent = isCurrentPageBookmarked() ? '🔖 MARKED ✓' : '🔖 MARK';
+}
+
+document.getElementById('readerState').textContent = `Genesis · Ch ${activeChapter}`;
+document.getElementById('backToShipBtn').addEventListener('click', () => {
+  window.location.href = 'spaceship-hub.html';
+});
+document.getElementById('futuristicStyleBtn').addEventListener('click', () => setReadingStyle('futuristic'));
+document.getElementById('hybridStyleBtn').addEventListener('click', () => setReadingStyle('hybrid'));
+applyReadingStyle(playerState.readingStyle);
 
 // === PHASE MANAGEMENT ===
 function showPhase(id) {
@@ -676,6 +788,7 @@ function renderPage() {
   document.getElementById('readTitle').textContent = `◈ Genesis ${devotionData.chapter}`;
   document.getElementById('readProgress').textContent = `CH ${devotionData.chapter} / 50`;
   document.getElementById('chapterTitle').textContent = devotionData.title;
+  updateBookmarkButton();
   // Scroll reading area to top
   document.getElementById('readingArea').scrollTop = 0;
 }
@@ -706,9 +819,14 @@ document.getElementById('sizeBtn').addEventListener('click', () => {
   document.getElementById('sizeBtn').textContent = labels[sizeIndex];
 });
 
-// Bookmark (visual feedback only for prototype)
+// Bookmark the first verse shown on the current reading page.
 document.getElementById('bookmarkBtn').addEventListener('click', function() {
-  this.textContent = this.textContent.includes('✓') ? '🔖 MARK' : '🔖 MARKED ✓';
+  const bookmark = currentBookmark();
+  const bookmarks = isCurrentPageBookmarked()
+    ? playerState.bookmarks.filter(item => item.chapter !== bookmark.chapter || item.verse !== bookmark.verse)
+    : [...playerState.bookmarks, bookmark];
+  playerState = GameState.set('bookmarks', bookmarks);
+  updateBookmarkButton();
 });
 
 // === PHASE 2: Reflection → Quiz ===
@@ -811,10 +929,7 @@ document.getElementById('fireBtn').addEventListener('click', () => {
 
 // === PHASE 5: Done ===
 document.getElementById('doneBtn').addEventListener('click', () => {
-  // In full game, return to map. Here, restart demo.
-  answered = false;
-  currentPage = 0;
-  showPhase('bootPhase');
+  window.location.href = 'spaceship-hub.html';
 });
 
 // === PROCEDURAL AUDIO ===
