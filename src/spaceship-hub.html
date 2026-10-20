@@ -1,0 +1,630 @@
+<title>Spaceship Hub</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600&family=Atkinson+Hyperlegible:wght@400;700&family=Spectral:ital@1&display=swap">
+<style>
+:root{
+  --night:#0d1024;--sky:#1b1440;--panel:#151a38;--panel-2:#1d2347;--line:#2c3260;
+  --ink:#f4ecdf;--muted:#a8a4c6;--holo:#6ff7ff;--sand:#f3a35c;--sand-ink:#2a1606;--sand-deep:#a53a27;
+  --f-pixel:"Pixelify Sans","Courier New",monospace;
+  --f-body:"Atkinson Hyperlegible",system-ui,sans-serif;
+  --f-verse:"Spectral",Georgia,serif;
+  color-scheme:dark;
+}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --night:#0d1024;--ink:#f4ecdf;color-scheme:dark;
+}}
+:root[data-theme="light"]{--night:#0d1024;--ink:#f4ecdf;color-scheme:dark}
+[hidden]{display:none!important}
+html,body{background:var(--night);color:var(--ink)}
+body{font-family:var(--f-body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:16px 32px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.eyebrow{font-family:var(--f-pixel);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--sand)}
+h1{font-family:var(--f-pixel);font-weight:600;font-size:clamp(26px,4vw,34px);margin:0;line-height:1.1}
+.controls{display:flex;gap:8px}
+.ctl{font-family:var(--f-pixel);font-size:14px;background:var(--panel-2);color:var(--ink);border:2px solid var(--line);border-radius:6px;padding:8px 12px;cursor:pointer}
+.ctl:hover{border-color:var(--muted)}
+button:focus-visible{outline:2px solid var(--holo);outline-offset:2px}
+.console{width:100%;width:min(100%,calc((100dvh - 200px)*16/9));min-width:min(100%,320px);margin:0 auto;display:flex;flex-direction:column;gap:8px}
+.stage{position:relative;width:100%;max-width:100%;aspect-ratio:16/9;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#0a0e1a;container-type:inline-size;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges}
+.hot{position:absolute;transform:translate(-50%,-50%);width:clamp(34px,7cqw,54px);height:clamp(34px,7cqw,54px);background:none;border:0;padding:0;cursor:pointer;color:var(--ink);font-family:var(--f-pixel);z-index:2}
+.ring{position:absolute;inset:0;border:3px solid var(--holo);border-radius:50%;animation:pulse 1.1s ease-out infinite}
+.hot::after{content:"";position:absolute;inset:-8px}
+@keyframes pulse{0%{transform:scale(.7);opacity:1}100%{transform:scale(1.25);opacity:.35}}
+.tag{position:absolute;left:50%;bottom:calc(100% + 4px);transform:translateX(-50%);font-size:clamp(11px,2.2cqw,15px);background:var(--sand);color:var(--sand-ink);padding:2px 8px;border-radius:4px;white-space:nowrap}
+.dialog{position:relative;min-height:72px;background:var(--panel);border:2px solid var(--line);border-radius:10px;padding:10px 34px 12px 14px;font-family:var(--f-pixel);font-size:17px;line-height:1.35;cursor:pointer;user-select:none;-webkit-user-select:none}
+.who{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--holo);margin-bottom:2px}
+.who.ship{color:var(--sand)}
+.who.sys{color:var(--muted)}
+.more{position:absolute;right:14px;bottom:12px;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid var(--ink);animation:bob .8s steps(2) infinite}
+@keyframes bob{50%{transform:translateY(3px)}}
+.hint-rotate{display:none;font-size:13px;color:var(--muted);margin:0;text-align:center}
+@media(orientation:portrait) and (max-width:600px){.hint-rotate{display:block}}
+/* Status bar */
+.status{display:flex;gap:16px;font-family:var(--f-pixel);font-size:13px;color:var(--muted);flex-wrap:wrap}
+.status .gold{color:var(--sand)}
+.status .ch{color:var(--holo)}
+footer{font-size:13px;color:var(--muted)}
+@media(prefers-reduced-motion:reduce){.ring,.more{animation:none}}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Spaceship interior hub — walk around and interact with stations</h2>
+  <header>
+    <div>
+      <div class="eyebrow">Home Base · The Vessel</div>
+      <h1>Your Ship</h1>
+    </div>
+    <div class="controls">
+      <button class="ctl" id="soundBtn" type="button" aria-pressed="true">Sound on</button>
+    </div>
+  </header>
+
+  <div class="status">
+    <span class="gold" id="goldDisplay">✦ 150 Gold</span>
+    <span class="ch" id="chDisplay">◈ Genesis · Ch 11 / 50</span>
+    <span>Day 3</span>
+  </div>
+
+  <div class="console" id="console">
+    <div class="stage" id="stage">
+      <canvas id="cv" width="192" height="108" aria-label="Spaceship interior"></canvas>
+      <!-- Hotspot buttons -->
+      <button class="hot" id="readerBtn" type="button" style="left:22%;top:62%" hidden>
+        <span class="ring"></span><span class="tag">Bible Reader</span>
+      </button>
+      <button class="hot" id="commandBtn" type="button" style="left:78%;top:55%" hidden>
+        <span class="ring"></span><span class="tag">Launch Mission</span>
+      </button>
+      <button class="hot" id="journalBtn" type="button" style="left:50%;top:50%" hidden>
+        <span class="ring"></span><span class="tag">Journal</span>
+      </button>
+      <button class="hot" id="bedBtn" type="button" style="left:10%;top:58%" hidden>
+        <span class="ring"></span><span class="tag">Rest</span>
+      </button>
+      <button class="hot" id="wardrobeBtn" type="button" style="left:56%;top:72%" hidden>
+        <span class="ring"></span><span class="tag">Wardrobe</span>
+      </button>
+    </div>
+    <div class="dialog" id="dialog" role="button" tabindex="0" aria-label="Dialogue">
+      <div class="who sys" id="dlgWho">Ship</div>
+      <div id="dlgText">Welcome home, Explorer.</div>
+      <span class="more" id="more" hidden></span>
+    </div>
+    <p class="hint-rotate">Tip: turn your phone sideways for a bigger view.</p>
+  </div>
+  <footer>Prototype. Tap anywhere on the floor to walk. Interact with glowing stations.</footer>
+</div>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const C=$('cv'),X=C.getContext('2d'),W=192,H=108;
+const BG=document.createElement('canvas');BG.width=W;BG.height=H;const BGX=BG.getContext('2d');
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function px(c,x,y,col){c.fillStyle=col;c.fillRect(Math.round(x),Math.round(y),1,1)}
+function rc(c,x,y,w,h,col){c.fillStyle=col;c.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))}
+
+// === COLOR PALETTE ===
+const WALL='#1a2238';const WALL_HI='#243050';const WALL_DK='#111828';
+const FLOOR='#2a3248';const FLOOR_HI='#3a4260';const FLOOR_DK='#1e2538';
+const METAL='#4a5568';const METAL_HI='#6a7588';const METAL_DK='#3a4050';
+const WARM='#f3a35c';const GLOW='#6ff7ff';const GREEN='#4ade80';const RED='#ef4444';
+const SCREEN_BG='#0a1828';
+
+// === PAINT STATIC BACKGROUND ===
+function paintBG(){
+  // Ceiling
+  rc(BGX,0,0,W,18,WALL_DK);
+  rc(BGX,0,18,W,2,METAL_DK);
+  // Ceiling detail - panels
+  for(let x=0;x<W;x+=24){
+    rc(BGX,x,2,22,14,WALL);
+    rc(BGX,x+1,3,20,12,WALL_HI);
+    rc(BGX,x+1,3,20,1,'#2a3a58');
+  }
+  // Ceiling lights
+  for(let x=16;x<W;x+=48){
+    rc(BGX,x,16,20,2,'#1a2a40');
+    rc(BGX,x+2,16,16,2,'#ffeedd');
+    rc(BGX,x+4,17,12,1,'#fff8ee');
+  }
+
+  // Back wall
+  rc(BGX,0,20,W,50,WALL);
+  // Wall panel lines
+  for(let x=0;x<W;x+=32){
+    rc(BGX,x,20,1,50,WALL_DK);
+    rc(BGX,x+1,20,1,50,WALL_HI);
+  }
+
+  // === VIEWPORT WINDOW (center) ===
+  const WX=76,WY=22,WW=40,WH=32;
+  rc(BGX,WX-2,WY-2,WW+4,WH+4,METAL);
+  rc(BGX,WX-1,WY-1,WW+2,WH+2,METAL_HI);
+  rc(BGX,WX,WY,WW,WH,'#020818');
+  // Stars through window
+  const starPos=[[3,4],[12,8],[25,3],[35,12],[8,20],[30,25],[18,15],[38,6],[15,28],[22,10],[5,14],[33,20],[28,28]];
+  starPos.forEach(([sx,sy])=>px(BGX,WX+sx,WY+sy,'#ffffff'));
+  // Earth in window
+  for(let dy=-6;dy<=6;dy++)for(let dx=-6;dx<=6;dx++){
+    if(dx*dx+dy*dy<=36){
+      const c=dx*dx+dy*dy<=25?(dy<-2?'#4a90d9':'#3a7a3a'):'#2a6ab0';
+      px(BGX,WX+WW-10+dx,WY+WH-10+dy,c);
+    }
+  }
+  // Window frame corners
+  rc(BGX,WX-2,WY-2,2,2,METAL_DK);rc(BGX,WX+WW,WY-2,2,2,METAL_DK);
+  rc(BGX,WX-2,WY+WH,2,2,METAL_DK);rc(BGX,WX+WW,WY+WH,2,2,METAL_DK);
+
+  // === BIBLE READER DESK (left area) ===
+  const DX=28,DY=68;
+  // Desk body
+  rc(BGX,DX,DY,24,8,METAL);rc(BGX,DX+1,DY+1,22,6,METAL_HI);
+  rc(BGX,DX,DY+8,24,2,METAL_DK);
+  // Desk legs
+  rc(BGX,DX+2,DY+10,3,8,METAL_DK);rc(BGX,DX+19,DY+10,3,8,METAL_DK);
+  // Laptop on desk
+  rc(BGX,DX+4,DY-6,16,6,METAL);rc(BGX,DX+5,DY-5,14,4,SCREEN_BG);
+  // Laptop base
+  rc(BGX,DX+6,DY,12,2,'#5c6470');
+  // Small lamp
+  rc(BGX,DX+20,DY-10,2,10,METAL_DK);px(BGX,DX+19,DY-11,WARM);px(BGX,DX+20,DY-11,WARM);px(BGX,DX+21,DY-11,WARM);
+  // Chair
+  rc(BGX,DX+8,DY+10,8,6,'#4a3828');rc(BGX,DX+9,DY+8,6,2,'#5a4838');
+  rc(BGX,DX+11,DY+16,4,4,METAL_DK);
+
+  // === COMMAND CENTER (right area) ===
+  const CXX=140,CYY=30;
+  // Big monitor frame
+  rc(BGX,CXX,CYY,36,28,METAL);rc(BGX,CXX+1,CYY+1,34,26,METAL_HI);
+  rc(BGX,CXX+2,CYY+2,32,24,SCREEN_BG);
+  // Monitor stand
+  rc(BGX,CXX+14,CYY+28,8,6,METAL_DK);rc(BGX,CXX+10,CYY+34,16,2,METAL);
+  // Console desk below
+  rc(BGX,CXX-4,CYY+36,44,8,METAL);rc(BGX,CXX-3,CYY+37,42,6,METAL_HI);
+  // Buttons on console
+  for(let i=0;i<5;i++){
+    const bc=i<2?GREEN:(i<4?WARM:RED);
+    rc(BGX,CXX+2+i*7,CYY+38,4,2,bc);
+  }
+  // Desk legs
+  rc(BGX,CXX-2,CYY+44,3,24,METAL_DK);rc(BGX,CXX+37,CYY+44,3,24,METAL_DK);
+
+  // === BED / SLEEP POD (far left) ===
+  const BX=2,BY=58;
+  rc(BGX,BX,BY,18,12,'#3a2828');rc(BGX,BX+1,BY+1,16,10,'#4a3838');
+  // Pillow
+  rc(BGX,BX+2,BY+2,6,4,'#8a7a6a');rc(BGX,BX+3,BY+3,4,2,'#a89a8a');
+  // Blanket
+  rc(BGX,BX+8,BY+3,8,6,'#2a4a6a');rc(BGX,BX+9,BY+4,6,4,'#3a5a7a');
+  // Bed frame
+  rc(BGX,BX,BY+12,18,2,METAL_DK);
+
+  // === BOOKSHELF / COLLECTIONS (behind, center-left) ===
+  const SX=56,SY=38;
+  rc(BGX,SX,SY,16,32,METAL_DK);rc(BGX,SX+1,SY+1,14,30,'#1a1a28');
+  // Shelves
+  for(let i=0;i<4;i++){
+    rc(BGX,SX,SY+7+i*8,16,1,METAL);
+    // Items on shelves
+    if(i===0){rc(BGX,SX+2,SY+4,3,3,'#b5643c');rc(BGX,SX+7,SY+3,4,4,GLOW);} // relic + hologram cube
+    if(i===1){rc(BGX,SX+3,SY+10,2,5,'#c44');rc(BGX,SX+6,SY+10,2,5,'#4a4');rc(BGX,SX+9,SY+11,3,4,'#44c');}
+    if(i===2){rc(BGX,SX+2,SY+18,5,4,WARM);} // gold stack
+  }
+
+  // === FLOOR ===
+  rc(BGX,0,70,W,38,FLOOR);
+  // Floor tiles
+  for(let x=0;x<W;x+=16){
+    rc(BGX,x,70,1,38,FLOOR_DK);
+    if(x%32===0)rc(BGX,x,70,16,1,FLOOR_HI);
+  }
+  rc(BGX,0,70,W,1,METAL);
+
+  // === PIPES & CABLES on walls ===
+  // Horizontal pipe top
+  rc(BGX,0,26,56,2,'#3a4a5c');rc(BGX,0,26,56,1,'#5a6a7c');
+  rc(BGX,120,26,72,2,'#3a4a5c');rc(BGX,120,26,72,1,'#5a6a7c');
+  // Vertical cables
+  rc(BGX,60,26,1,44,'#2a3a28');rc(BGX,61,26,1,44,'#4a6a48');
+  rc(BGX,118,26,1,44,'#2a2838');rc(BGX,119,26,1,44,'#4a4868');
+
+  // Wall outlet / vents
+  for(let y=40;y<65;y+=12){
+    rc(BGX,1,y,4,6,METAL_DK);
+    for(let i=0;i<3;i++)rc(BGX,2,y+1+i*2,2,1,'#0a0e18');
+  }
+
+  // === WARDROBE (between shelf and window, on wall) ===
+  const WDX=96,WDY=48;
+  // Wardrobe body
+  rc(BGX,WDX,WDY,18,22,METAL_DK);rc(BGX,WDX+1,WDY+1,16,20,'#2a2040');
+  // Double doors
+  rc(BGX,WDX+1,WDY+1,7,20,'#322850');rc(BGX,WDX+9,WDY+1,7,20,'#2e2448');
+  // Door line
+  rc(BGX,WDX+8,WDY+1,1,20,'#1a1430');
+  // Handles
+  px(BGX,WDX+7,WDY+10,GLOW);px(BGX,WDX+10,WDY+10,GLOW);
+  // Top trim
+  rc(BGX,WDX-1,WDY-1,20,2,METAL);
+  // Star/hanger icon on door
+  px(BGX,WDX+4,WDY+5,WARM);px(BGX,WDX+5,WDY+4,WARM);px(BGX,WDX+5,WDY+6,WARM);px(BGX,WDX+6,WDY+5,WARM);
+  px(BGX,WDX+12,WDY+5,WARM);px(BGX,WDX+13,WDY+4,WARM);px(BGX,WDX+13,WDY+6,WARM);px(BGX,WDX+14,WDY+5,WARM);
+}
+paintBG();
+
+// === ASTRONAUT SKINS ===
+// Skin 0: THE ARCHIVIST (Classic White Suit) — original
+// Skin 1: THE NOMAD (Desert Wanderer) — sandy cloak, dark helmet, cyan slit visor
+// Skin 2: THE BEACON (Retro-Heavy) — cream bulky suit, orange accents, CRT helmet with green pixel eyes
+const SKINS=[
+  {name:'The Archivist',desc:'Classic exploration suit',
+   pal:{w:'#eef3f6',g:'#9aa6b2',v:'#2aa3d6',V:'#b8f0ff',o:'#f08a3a',d:'#3a3f4a',k:'#20242c'},
+   body:["...wwww...","..wwwwww..",".gwwvvvw.",".gwwvVvvw.",".gwwvvvvw.","..wwwwww..",".gwwwwwo..",".gwwowww..",".gwwowww..","..wwwwww.."],
+   legs0:["..ww..ww..","..ww..ww..","..dd..dd.."],
+   legs1:[".ww....ww.",".ww....ww.",".dd....dd."],
+   legs2:["...wwww...","...wwww...","...dddd..."],
+   sit:["...wwww...","..wwwwww..",".gwwvvvw.",".gwwvVvvw.",".gwwvvvvw.","..wwwwww..","..wwwwww..","..wwowwo..",".wwwwwwww."]},
+  {name:'The Nomad',desc:'Desert wanderer cloak',
+   pal:{w:'#333a3d',g:'#2a2a28',v:'#00e5ff',V:'#00e5ff',o:'#a87c63',d:'#4a5559',k:'#1a1a18',
+        C:'#9c7359',c:'#a87c63'},
+   body:["...wwww...","..wwwwww..",".gwwvvww.",".gwwvVvw.",".gwwvvvw.","..CCCCCC..","..CcccCC..","..CcccCC..","..CcccCC..","..CCCCCC.."],
+   legs0:["..dd..dd..","..dd..dd..","..dd..dd.."],
+   legs1:[".dd....dd.",".dd....dd.",".dd....dd."],
+   legs2:["...dddd...","...dddd...","...dddd..."],
+   sit:["...wwww...","..wwwwww..",".gwwvvww.",".gwwvVvw.",".gwwvvvw.","..CCCCCC..","..CcccCC..","..CcccCC..",".CCCCCCCC."]},
+  {name:'The Beacon',desc:'Retro-heavy mech suit',
+   pal:{w:'#e2dacd',g:'#d6cfc4',v:'#1e261d',V:'#00ff41',o:'#d86a48',d:'#b0a898',k:'#888888',
+        O:'#d86a48',G:'#00ff41'},
+   body:["..wwwwww..","..wvvvvw..","..wvGGvw..","..wvvvvw..","..wwwwww..",".gOOOOOOg.",".gwwwwwwg.",".gOOOOOOg.",".gwwwwwwg.","..wwwwww.."],
+   legs0:["..ww..ww..","..ww..ww..","..dd..dd.."],
+   legs1:[".ww....ww.",".ww....ww.",".dd....dd."],
+   legs2:["...wwww...","...wwww...","...dddd..."],
+   sit:["..wwwwww..","..wvvvvw..","..wvGGvw..","..wvvvvw..","..wwwwww..",".gOOOOOOg.",".gwwwwwwg.",".gOOOOOOg.",".wwwwwwww."]}
+];
+let currentSkin=0;
+function getSkin(){return SKINS[currentSkin];}
+// Active palette merges skin-specific chars
+function getPAL(){return getSkin().pal;}
+const BODY_F=()=>getSkin().body;
+const LEGS0_F=()=>getSkin().legs0;
+const LEGS1_F=()=>getSkin().legs1;
+const LEGS2_F=()=>getSkin().legs2;
+const SIT_F=()=>getSkin().sit;
+
+function sprite(rows,ox,oy,flip,palOverride){
+  const P=palOverride||getPAL();
+  ox=Math.round(ox);oy=Math.round(oy);
+  const draw=(s,i,j)=>{
+    const ci=flip?s.length-1-i:i;
+    if(s[ci]!=='.'){
+      px(X,ox+i-1,oy+j,'#1a1028');px(X,ox+i+1,oy+j,'#1a1028');
+      px(X,ox+i,oy+j-1,'#1a1028');px(X,ox+i,oy+j+1,'#1a1028');
+    }
+  };
+  rows.forEach((s,j)=>{for(let i=0;i<s.length;i++)draw(s,i,j);});
+  rows.forEach((s,j)=>{for(let i=0;i<s.length;i++){
+    const ci=flip?s.length-1-i:i;
+    if(s[ci]!=='.'&&P[s[ci]])px(X,ox+i,oy+j,P[s[ci]]);
+  }});
+}
+
+// === GAME STATE ===
+let A={x:96,y:90,pose:'stand',walkT:0,targetX:96,facing:1};
+let screenGlow=0;
+let commandScreen={frame:0,scene:'babel'};
+let blinkLights=[];
+for(let i=0;i<6;i++)blinkLights.push({x:4+Math.random()*184,y:22+Math.random()*46,rate:1+Math.random()*3,phase:Math.random()*6.28,color:Math.random()>.5?GREEN:RED});
+
+// === HOTSPOT VISIBILITY ===
+const STATIONS={
+  reader:{x:40,min:24,max:56,btn:'readerBtn'},
+  command:{x:158,min:140,max:174,btn:'commandBtn'},
+  journal:{x:64,min:48,max:78,btn:'journalBtn'},
+  bed:{x:11,min:0,max:22,btn:'bedBtn'},
+  wardrobe:{x:105,min:88,max:120,btn:'wardrobeBtn'}
+};
+
+function updateHotspots(){
+  for(const[key,st]of Object.entries(STATIONS)){
+    const near=A.x>=st.min&&A.x<=st.max;
+    $(st.btn).hidden=!near;
+  }
+}
+
+// === DRAWING ===
+function drawAstro(t){
+  let legs=LEGS0_F(),bob=0,body=BODY_F(),flip=A.facing<0;
+  if(A.pose==='walk'){
+    const f=Math.floor(A.walkT*6)%2;
+    legs=f?LEGS1_F():LEGS2_F();bob=f?0:-1;
+  } else if(A.pose==='sit'){
+    sprite(SIT_F(),A.x-5,A.y-9,flip);return;
+  } else {
+    bob=Math.floor(t*1.2)%2===0?0:0;
+  }
+  sprite(body.concat(legs),A.x-5,A.y-13+bob,flip);
+}
+
+function drawAnimatedElements(t){
+  // Laptop screen glow
+  const laptopGlow=0.5+0.3*Math.sin(t*2);
+  X.globalAlpha=laptopGlow;
+  rc(X,33,63,14,4,GLOW);
+  X.globalAlpha=0.15;
+  rc(X,33,63,14,4,'#ffffff');
+  X.globalAlpha=1;
+  // Laptop text lines
+  for(let i=0;i<3;i++){
+    rc(X,34,64+i,Math.floor(6+Math.sin(t+i)*4),1,i===0?GLOW:'#4a8898');
+  }
+
+  // Command center screen
+  const CXX=140,CYY=30;
+  // Animated screen content - destination preview
+  X.globalAlpha=0.8+0.15*Math.sin(t*1.5);
+  rc(X,CXX+3,CYY+3,30,10,'#0a2838');
+  // Mini scene preview (Babel tower silhouette)
+  rc(X,CXX+14,CYY+5,6,7,'#b98a5c');
+  rc(X,CXX+15,CYY+3,4,2,'#b98a5c');
+  rc(X,CXX+16,CYY+2,2,1,'#b98a5c');
+  // "NEXT MISSION" text
+  for(let i=0;i<4;i++)rc(X,CXX+5+i*3,CYY+14,2,1,GLOW);
+  // Location name
+  for(let i=0;i<6;i++)rc(X,CXX+4+i*4,CYY+17,3,1,WARM);
+  // Blinking ready indicator
+  if(Math.sin(t*3)>0)rc(X,CXX+30,CYY+22,3,2,GREEN);
+  X.globalAlpha=1;
+
+  // Blinking wall lights
+  blinkLights.forEach(l=>{
+    const on=Math.sin(t*l.rate+l.phase)>0.3;
+    if(on){px(X,l.x,l.y,l.color);X.globalAlpha=0.2;px(X,l.x-1,l.y,l.color);px(X,l.x+1,l.y,l.color);X.globalAlpha=1;}
+  });
+
+  // Lamp warm glow
+  X.globalAlpha=0.08+0.03*Math.sin(t*1.2);
+  for(let dy=-8;dy<=8;dy++)for(let dx=-8;dx<=8;dx++){
+    if(dx*dx+dy*dy<=64)px(X,48+dx,57+dy,WARM);
+  }
+  X.globalAlpha=1;
+
+  // Window stars twinkle
+  const WX=76,WY=22;
+  const twinkle=[[3,4],[25,3],[8,20],[18,15],[38,6]];
+  twinkle.forEach(([sx,sy])=>{
+    if(Math.sin(t*2+sx*sy)>0.4){
+      X.globalAlpha=0.6;
+      px(X,WX+sx-1,WY+sy,'#aaccff');px(X,WX+sx+1,WY+sy,'#aaccff');
+      px(X,WX+sx,WY+sy-1,'#aaccff');px(X,WX+sx,WY+sy+1,'#aaccff');
+      X.globalAlpha=1;
+    }
+  });
+
+  // Shelf hologram cube glow
+  X.globalAlpha=0.3+0.2*Math.sin(t*4);
+  px(X,62,41,GLOW);px(X,64,41,GLOW);px(X,63,40,GLOW);px(X,63,42,GLOW);
+  X.globalAlpha=1;
+
+  // Floor reflection under window
+  X.globalAlpha=0.04;
+  rc(X,80,72,30,6,'#4a90d9');
+  X.globalAlpha=1;
+}
+
+// === MAIN LOOP ===
+let lastT=performance.now(),t0=lastT;
+function frame(now){
+  const dt=Math.min(.05,(now-lastT)/1000);lastT=now;const t=(now-t0)/1000;
+
+  // Walk logic
+  if(A.pose==='walk'){
+    const dir=A.targetX>A.x?1:-1;
+    A.facing=dir;
+    A.x+=dir*25*dt;
+    A.walkT+=dt;
+    if((dir>0&&A.x>=A.targetX)||(dir<0&&A.x<=A.targetX)){
+      A.x=A.targetX;A.pose='stand';
+    }
+    if(Math.floor(A.walkT*6)%2===0&&Math.floor((A.walkT-dt)*6)%2!==0)sfxStep();
+    updateHotspots();
+  }
+
+  // Draw
+  X.setTransform(1,0,0,1,0,0);X.imageSmoothingEnabled=false;
+  X.drawImage(BG,0,0);
+  drawAnimatedElements(t);
+  drawAstro(t);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+// === AUDIO ===
+let AC=null,master,sfxGain,soundOn=true;
+function audioInit(){
+  if(AC)return;
+  try{AC=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return;}
+  master=AC.createGain();master.gain.value=1;master.connect(AC.destination);
+  sfxGain=AC.createGain();sfxGain.gain.value=.4;sfxGain.connect(master);
+}
+function tone(f,d,type,v,t0,f2){
+  if(!AC)return;const t=AC.currentTime+(t0||0);
+  const o=AC.createOscillator(),g=AC.createGain();
+  o.type=type||'square';o.frequency.setValueAtTime(f,t);
+  if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);
+  g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v||.1,t+.008);
+  g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(g);g.connect(sfxGain);o.start(t);o.stop(t+d+.05);
+}
+let NB=null;
+function noise(d,v,ff){
+  if(!AC)return;if(!NB){NB=AC.createBuffer(1,AC.sampleRate*2,AC.sampleRate);const ch=NB.getChannelData(0);for(let i=0;i<ch.length;i++)ch[i]=Math.random()*2-1;}
+  const t=AC.currentTime;const s=AC.createBufferSource();s.buffer=NB;s.loop=true;
+  const f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=ff||800;
+  const g=AC.createGain();g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+.005);
+  g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  s.connect(f);f.connect(g);g.connect(sfxGain);s.start(t);s.stop(t+d+.05);
+}
+const sfxStep=()=>noise(.04,.04,2200);
+const sfxSelect=()=>{tone(660,.06,'square',.08);tone(880,.08,'square',.06,.05);};
+const sfxDeny=()=>tone(220,.2,'square',.06);
+
+// === TAP TO WALK ===
+const stage=$('stage');
+stage.addEventListener('click',e=>{
+  audioInit();if(AC&&AC.resume)AC.resume();
+  const rect=stage.getBoundingClientRect();
+  const clickX=(e.clientX-rect.left)/rect.width*W;
+  const clickY=(e.clientY-rect.top)/rect.height*H;
+  // Only walk if clicking on floor area
+  if(clickY>65){
+    A.targetX=Math.max(8,Math.min(W-8,clickX));
+    if(Math.abs(A.targetX-A.x)>3){
+      A.pose='walk';A.walkT=0;
+    }
+  }
+});
+
+// === DIALOG SYSTEM ===
+const dlgWho=$('dlgWho'),dlgText=$('dlgText'),moreEl=$('more');
+const blip=who=>tone(who==='Ship'?320+Math.random()*60:620+Math.random()*180,.035,'square',.02);
+function showMsg(who,text,cls){
+  dlgWho.textContent=who;
+  dlgWho.className='who'+(cls?' '+cls:'');
+  dlgText.textContent='';moreEl.hidden=true;
+  let i=0;
+  const iv=setInterval(()=>{
+    i++;dlgText.textContent=text.slice(0,i);
+    if(i%2===0&&text[i-1]!==' ')blip(who);
+    if(i>=text.length){clearInterval(iv);moreEl.hidden=true;}
+  },30);
+}
+
+// === STATION INTERACTIONS ===
+$('readerBtn').addEventListener('click',e=>{
+  e.stopPropagation();sfxSelect();
+  showMsg('Ship','Opening Ancient Text Reader... Genesis chapters loaded.','ship');
+  // In full game: opens the devotion-screen.html reading UI
+  setTimeout(()=>showMsg('System','[Bible Reading UI would open here — hybrid reader with Genesis chapters]','sys'),2000);
+});
+
+$('commandBtn').addEventListener('click',e=>{
+  e.stopPropagation();sfxSelect();
+  showMsg('Ship','Next mission: Plain of Shinar. Genesis 11. Ready to launch.','ship');
+  // In full game: plays rocket launch animation → loads exploration scene
+  setTimeout(()=>showMsg('System','[Launch sequence → Babel Landing scene would load]','sys'),2500);
+});
+
+$('journalBtn').addEventListener('click',e=>{
+  e.stopPropagation();sfxSelect();
+  showMsg('Explorer','My journal... everything we\'ve found so far.');
+  setTimeout(()=>showMsg('System','[Journal / Collections UI would open here]','sys'),2000);
+});
+
+$('bedBtn').addEventListener('click',e=>{
+  e.stopPropagation();sfxSelect();
+  showMsg('Explorer','Maybe a quick rest. Space travel is exhausting.');
+  // In full game: save game + advance to next day
+  setTimeout(()=>showMsg('System','[Save game + rest until tomorrow]','sys'),2000);
+});
+
+// === WARDROBE OVERLAY ===
+$('wardrobeBtn').addEventListener('click',e=>{
+  e.stopPropagation();sfxSelect();
+  showWardrobe();
+});
+
+function showWardrobe(){
+  // Remove existing overlay
+  let ov=document.getElementById('wardrobeOv');
+  if(ov){ov.remove();return;}
+  ov=document.createElement('div');ov.id='wardrobeOv';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(10,10,26,0.92);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px;';
+  const title=document.createElement('div');
+  title.style.cssText='font-family:var(--f-pixel);font-size:clamp(18px,4vw,24px);color:#6ff7ff;letter-spacing:0.1em;text-transform:uppercase;';
+  title.textContent='Wardrobe';
+  ov.appendChild(title);
+  const sub=document.createElement('div');
+  sub.style.cssText='font-family:var(--f-pixel);font-size:12px;color:#a8a4c6;margin-bottom:8px;';
+  sub.textContent='Choose your explorer suit';
+  ov.appendChild(sub);
+  const row=document.createElement('div');
+  row.style.cssText='display:flex;gap:16px;flex-wrap:wrap;justify-content:center;';
+
+  SKINS.forEach((skin,idx)=>{
+    const card=document.createElement('button');
+    const sel=idx===currentSkin;
+    card.style.cssText=`background:${sel?'rgba(111,247,255,0.12)':'rgba(30,30,60,0.8)'};border:2px solid ${sel?'#6ff7ff':'#2c3260'};border-radius:12px;padding:16px 14px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:100px;transition:all 0.2s;`;
+    // Mini canvas preview of the skin
+    const mc=document.createElement('canvas');mc.width=40;mc.height=52;
+    mc.style.cssText='image-rendering:pixelated;image-rendering:crisp-edges;width:60px;height:78px;';
+    const mx=mc.getContext('2d');mx.imageSmoothingEnabled=false;
+    // Draw preview sprite
+    const P=skin.pal;const bdy=skin.body.concat(skin.legs0);
+    bdy.forEach((s,j)=>{for(let i=0;i<s.length;i++){
+      if(s[i]!=='.'&&P[s[i]]){mx.fillStyle=P[s[i]];mx.fillRect(15+i*1,6+j*1,1,1);}
+    }});
+    // Scale it up with drawImage
+    const mc2=document.createElement('canvas');mc2.width=60;mc2.height=78;
+    mc2.style.cssText='image-rendering:pixelated;image-rendering:crisp-edges;width:60px;height:78px;';
+    const mx2=mc2.getContext('2d');mx2.imageSmoothingEnabled=false;
+    mx2.drawImage(mc,0,0,40,52,0,0,60,78);
+    card.appendChild(mc2);
+    const nm=document.createElement('div');
+    nm.style.cssText=`font-family:var(--f-pixel);font-size:13px;color:${sel?'#6ff7ff':'#f4ecdf'};`;
+    nm.textContent=skin.name;
+    card.appendChild(nm);
+    const ds=document.createElement('div');
+    ds.style.cssText='font-family:var(--f-pixel);font-size:10px;color:#a8a4c6;';
+    ds.textContent=skin.desc;
+    card.appendChild(ds);
+    if(sel){
+      const badge=document.createElement('div');
+      badge.style.cssText='font-family:var(--f-pixel);font-size:10px;color:#f3a35c;margin-top:2px;';
+      badge.textContent='✦ EQUIPPED';
+      card.appendChild(badge);
+    }
+    card.addEventListener('click',()=>{
+      currentSkin=idx;sfxSelect();
+      showMsg('Explorer','Nice! The '+skin.name+' suit looks great.','');
+      ov.remove();
+    });
+    card.addEventListener('mouseenter',()=>{if(idx!==currentSkin)card.style.borderColor='#6ff7ff80';});
+    card.addEventListener('mouseleave',()=>{if(idx!==currentSkin)card.style.borderColor='#2c3260';});
+    row.appendChild(card);
+  });
+  ov.appendChild(row);
+  const closeBtn=document.createElement('button');
+  closeBtn.style.cssText='font-family:var(--f-pixel);font-size:14px;color:#a8a4c6;background:none;border:1px solid #2c3260;padding:8px 24px;border-radius:6px;cursor:pointer;margin-top:8px;';
+  closeBtn.textContent='Close';
+  closeBtn.addEventListener('click',()=>{ov.remove();sfxStep();});
+  ov.appendChild(closeBtn);
+  document.body.appendChild(ov);
+}
+
+// Sound toggle
+$('soundBtn').addEventListener('click',()=>{
+  soundOn=!soundOn;
+  if(master)master.gain.value=soundOn?1:0;
+  $('soundBtn').textContent=soundOn?'Sound on':'Sound off';
+  $('soundBtn').setAttribute('aria-pressed',String(soundOn));
+});
+
+// Initial hotspot check
+updateHotspots();
+
+// Welcome message after a beat
+setTimeout(()=>{
+  audioInit();
+  showMsg('Ship','Welcome home, Explorer. What would you like to do? Walk to a station to interact.','ship');
+},500);
+})();
+</script>

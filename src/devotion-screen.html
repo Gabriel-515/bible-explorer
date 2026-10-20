@@ -1,0 +1,860 @@
+<title>Devotion Screen</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&family=Spectral:ital,wght@0,400;0,600;1,400&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Dark-first single-theme: game UI */
+:root {
+  --bg: #0a0a1a; --fg: #ffe8c0; --muted: #6a5a40;
+  --holo: #6ff7ff; --holo-dim: rgba(111,247,255,0.15);
+  --sand: #f3a35c; --warm: #ffe8c0;
+  --reading-bg: #faf3e8; --reading-fg: #2a2016; --reading-muted: #8a7a5a;
+  --frame-bg: #12101a; --frame-border: rgba(111,247,255,0.12);
+  --success: #6fdb7f; --gold: #f0c040;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --bg:#0a0a1a;--fg:#ffe8c0;color-scheme:dark
+}}
+:root[data-theme="light"]{--bg:#0a0a1a;--fg:#ffe8c0;color-scheme:dark}
+
+*{box-sizing:border-box;margin:0}
+body{
+  background:var(--bg);color:var(--fg);
+  font-family:'Atkinson Hyperlegible',sans-serif;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0;
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+
+/* Canvas background for stars + laser */
+#bgCanvas{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;
+}
+
+/* Screen container */
+.screen{
+  position:relative;z-index:1;
+  width:100%;max-width:440px;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+}
+
+/* All phases hidden by default */
+.phase{display:none;flex-direction:column;flex:1}
+.phase.active{display:flex}
+
+/* === PHASE 0: Laptop Boot === */
+#bootPhase{
+  align-items:center;justify-content:center;
+  gap:20px;text-align:center;
+  padding:40px 20px;
+}
+.laptop-icon{
+  width:120px;height:80px;
+  border:2px solid var(--holo);
+  border-radius:8px 8px 2px 2px;
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(111,247,255,0.03);
+  box-shadow:0 0 30px rgba(111,247,255,0.1);
+}
+.laptop-icon::after{
+  content:'';position:absolute;
+  bottom:-8px;left:-10px;right:-10px;height:6px;
+  background:var(--holo);border-radius:0 0 4px 4px;
+  opacity:0.3;
+}
+.laptop-icon .cursor{
+  width:12px;height:16px;
+  border-left:2px solid var(--holo);
+  animation:blink 1s step-end infinite;
+}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+.boot-text{
+  font-family:'Pixelify Sans',cursive;
+  color:var(--holo);font-size:0.9rem;
+}
+.boot-sub{color:var(--muted);font-size:0.75rem;margin-top:-8px}
+.boot-btn{
+  font-family:'Pixelify Sans',cursive;
+  background:rgba(111,247,255,0.08);
+  border:1px solid var(--holo);
+  color:var(--holo);
+  padding:10px 32px;border-radius:6px;
+  font-size:0.9rem;cursor:pointer;
+  transition:all 0.2s;
+  margin-top:12px;
+}
+.boot-btn:hover,.boot-btn:focus{
+  background:rgba(111,247,255,0.15);
+  box-shadow:0 0 20px rgba(111,247,255,0.2);
+  outline:none;
+}
+
+/* === PHASE 1: Reading === */
+#readPhase{padding:0}
+.read-header{
+  background:var(--frame-bg);
+  padding:16px 20px 12px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid var(--frame-border);
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:5;
+}
+.read-header .title{
+  font-family:'Pixelify Sans',cursive;
+  color:var(--holo);font-size:1rem;
+}
+.read-header .progress{
+  font-size:0.7rem;color:var(--muted);
+  font-family:'Pixelify Sans',cursive;
+}
+.read-content{
+  flex:1;padding:16px;
+  display:flex;flex-direction:column;gap:0;
+}
+.reading-area{
+  background:var(--reading-bg);
+  border-radius:10px;
+  padding:24px 20px;
+  box-shadow:0 0 30px rgba(255,232,192,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+  border:1px solid rgba(200,180,140,0.15);
+  flex:1;
+  overflow-y:auto;
+  max-height:55vh;
+  position:relative;
+}
+.reading-area::before{
+  content:'';position:absolute;
+  inset:0;border-radius:10px;
+  opacity:0.06;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'%3E%3Ccircle cx='320' cy='420' r='60' fill='none' stroke='%23886644' stroke-width='1'/%3E%3Ccircle cx='320' cy='420' r='45' fill='none' stroke='%23886644' stroke-width='0.5'/%3E%3Cpath d='M50 480 Q80 440 60 400 Q40 360 70 330 Q90 310 75 280' fill='none' stroke='%23886644' stroke-width='1.2'/%3E%3Cpath d='M55 400 Q70 390 80 395' fill='none' stroke='%23886644' stroke-width='0.8'/%3E%3Cpath d='M65 370 Q50 365 45 370' fill='none' stroke='%23886644' stroke-width='0.8'/%3E%3Cpath d='M72 340 Q85 335 90 340' fill='none' stroke='%23886644' stroke-width='0.8'/%3E%3Ccircle cx='340' cy='80' r='4' fill='%23886644'/%3E%3Ccircle cx='360' cy='60' r='2' fill='%23886644'/%3E%3Ccircle cx='310' cy='50' r='3' fill='%23886644'/%3E%3Ccircle cx='370' cy='100' r='2.5' fill='%23886644'/%3E%3Ccircle cx='290' cy='70' r='1.5' fill='%23886644'/%3E%3Ccircle cx='350' cy='40' r='1.8' fill='%23886644'/%3E%3Ccircle cx='330' cy='110' r='2' fill='%23886644'/%3E%3Cpath d='M280 450 Q300 430 320 440 Q340 450 360 435' fill='none' stroke='%23886644' stroke-width='0.6' stroke-dasharray='4 3'/%3E%3Cpath d='M300 150 Q310 130 330 140' fill='none' stroke='%23886644' stroke-width='0.6'/%3E%3Cpath d='M310 140 L315 125 L320 138' fill='none' stroke='%23886644' stroke-width='0.5'/%3E%3C/svg%3E");
+  background-size:cover;background-position:center;
+}
+.reading-area .verse{
+  font-family:'Spectral',serif;
+  color:var(--reading-fg);
+  font-size:1rem;line-height:1.85;
+  margin-bottom:8px;
+}
+.reading-area .vn{
+  color:#b08a50;font-size:0.7rem;font-weight:600;
+  vertical-align:super;margin-right:3px;
+}
+.reading-area .chapter-title{
+  font-family:'Pixelify Sans',cursive;
+  color:var(--reading-muted);
+  font-size:0.8rem;text-align:center;
+  margin-bottom:16px;letter-spacing:0.1em;
+  text-transform:uppercase;
+}
+.reading-toolbar{
+  display:flex;gap:8px;justify-content:center;
+  margin-top:14px;flex-wrap:wrap;
+}
+.tool-btn{
+  font-size:0.65rem;color:var(--holo);
+  background:rgba(111,247,255,0.05);
+  border:1px solid rgba(111,247,255,0.15);
+  padding:5px 12px;border-radius:14px;
+  font-family:'Pixelify Sans',cursive;
+  cursor:pointer;transition:all 0.2s;
+}
+.tool-btn:hover,.tool-btn:focus{
+  background:rgba(111,247,255,0.12);outline:none;
+}
+.read-footer{
+  background:var(--frame-bg);
+  padding:12px 20px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-top:1px solid var(--frame-border);
+}
+.nav-btn{
+  font-family:'Pixelify Sans',cursive;
+  color:var(--holo);font-size:0.75rem;
+  background:rgba(111,247,255,0.06);
+  border:1px solid rgba(111,247,255,0.2);
+  padding:6px 16px;border-radius:5px;
+  cursor:pointer;transition:all 0.2s;
+}
+.nav-btn:hover,.nav-btn:focus{
+  background:rgba(111,247,255,0.15);outline:none;
+}
+.nav-btn:disabled{opacity:0.3;cursor:default}
+.page-ind{color:var(--muted);font-size:0.65rem;font-family:'Pixelify Sans',cursive}
+
+/* === PHASE 2: Reflection === */
+#reflectPhase{
+  padding:20px;gap:24px;
+  align-items:center;justify-content:center;
+}
+.reflect-card{
+  background:rgba(111,247,255,0.04);
+  border:1px solid var(--frame-border);
+  border-radius:12px;
+  padding:28px 24px;
+  max-width:400px;width:100%;
+}
+.reflect-label{
+  font-family:'Pixelify Sans',cursive;
+  color:var(--holo);font-size:0.8rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  margin-bottom:12px;
+}
+.reflect-text{
+  font-family:'Spectral',serif;
+  color:var(--warm);font-size:1rem;
+  line-height:1.8;font-style:italic;
+}
+.prayer-card{
+  background:rgba(243,163,92,0.06);
+  border:1px solid rgba(243,163,92,0.15);
+  border-radius:12px;
+  padding:24px;
+  max-width:400px;width:100%;
+}
+.prayer-label{
+  font-family:'Pixelify Sans',cursive;
+  color:var(--sand);font-size:0.8rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.prayer-text{
+  color:var(--fg);font-size:0.9rem;line-height:1.7;
+  opacity:0.85;
+}
+.continue-btn{
+  font-family:'Pixelify Sans',cursive;
+  background:rgba(111,247,255,0.08);
+  border:1px solid var(--holo);
+  color:var(--holo);
+  padding:12px 36px;border-radius:6px;
+  font-size:0.9rem;cursor:pointer;
+  transition:all 0.2s;
+  align-self:center;
+}
+.continue-btn:hover,.continue-btn:focus{
+  background:rgba(111,247,255,0.18);
+  box-shadow:0 0 20px rgba(111,247,255,0.15);
+  outline:none;
+}
+
+/* === PHASE 3: Quiz === */
+#quizPhase{
+  padding:20px;gap:20px;
+  align-items:center;justify-content:center;
+}
+.quiz-card{
+  background:rgba(111,247,255,0.03);
+  border:1px solid var(--frame-border);
+  border-radius:12px;
+  padding:28px 24px;
+  max-width:400px;width:100%;
+}
+.quiz-label{
+  font-family:'Pixelify Sans',cursive;
+  color:var(--holo);font-size:0.75rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  margin-bottom:16px;
+}
+.quiz-question{
+  color:var(--warm);font-size:1.05rem;
+  line-height:1.6;margin-bottom:20px;
+  font-family:'Spectral',serif;
+}
+.quiz-options{display:flex;flex-direction:column;gap:10px}
+.quiz-opt{
+  background:rgba(111,247,255,0.04);
+  border:1px solid rgba(111,247,255,0.12);
+  border-radius:8px;
+  padding:12px 16px;
+  color:var(--fg);font-size:0.9rem;
+  cursor:pointer;transition:all 0.25s;
+  text-align:left;
+  font-family:'Atkinson Hyperlegible',sans-serif;
+}
+.quiz-opt:hover,.quiz-opt:focus{
+  background:rgba(111,247,255,0.1);
+  border-color:rgba(111,247,255,0.3);
+  outline:none;
+}
+.quiz-opt.correct{
+  background:rgba(111,219,127,0.12);
+  border-color:var(--success);
+  color:var(--success);
+}
+.quiz-opt.wrong{
+  background:rgba(255,80,80,0.1);
+  border-color:#ff5050;
+  color:#ff8080;
+}
+.quiz-opt.dimmed{opacity:0.4;cursor:default}
+.quiz-result{
+  text-align:center;margin-top:12px;
+  font-family:'Pixelify Sans',cursive;
+  font-size:0.85rem;
+}
+.quiz-result.correct-msg{color:var(--success)}
+.quiz-result.wrong-msg{color:#ff8080}
+.gold-earned{
+  color:var(--gold);font-size:0.8rem;
+  text-align:center;margin-top:4px;
+  font-family:'Pixelify Sans',cursive;
+}
+
+/* === PHASE 4: Transmitter === */
+#transmitPhase{
+  align-items:center;justify-content:center;
+  text-align:center;gap:16px;
+  padding:40px 20px;
+}
+.transmit-device{
+  width:60px;height:80px;
+  border:2px solid var(--holo);
+  border-radius:6px;
+  position:relative;
+  background:rgba(111,247,255,0.05);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:8px;
+}
+.transmit-device .antenna{
+  position:absolute;top:-20px;left:50%;
+  width:2px;height:20px;
+  background:var(--holo);
+  transform:translateX(-50%);
+}
+.transmit-device .antenna::after{
+  content:'';position:absolute;top:-4px;left:-3px;
+  width:8px;height:8px;
+  border-radius:50%;
+  background:var(--holo);
+  box-shadow:0 0 10px var(--holo);
+}
+.transmit-device .screen-icon{
+  width:30px;height:20px;
+  border:1px solid rgba(111,247,255,0.3);
+  border-radius:2px;
+  display:flex;align-items:center;justify-content:center;
+}
+.transmit-text{
+  font-family:'Pixelify Sans',cursive;
+  color:var(--holo);font-size:1rem;
+}
+.transmit-sub{
+  color:var(--muted);font-size:0.8rem;
+  max-width:280px;
+}
+.transmit-btn{
+  font-family:'Pixelify Sans',cursive;
+  background:rgba(243,163,92,0.1);
+  border:2px solid var(--sand);
+  color:var(--sand);
+  padding:14px 40px;border-radius:8px;
+  font-size:1rem;cursor:pointer;
+  transition:all 0.3s;
+  margin-top:8px;
+  animation:pulse-glow 2s ease-in-out infinite;
+}
+@keyframes pulse-glow{
+  0%,100%{box-shadow:0 0 10px rgba(243,163,92,0.1)}
+  50%{box-shadow:0 0 30px rgba(243,163,92,0.3)}
+}
+.transmit-btn:hover,.transmit-btn:focus{
+  background:rgba(243,163,92,0.2);outline:none;
+}
+
+/* === PHASE 5: Laser Finale === */
+#laserPhase{
+  align-items:center;justify-content:center;
+  text-align:center;gap:16px;
+  padding:40px 20px;
+}
+.laser-msg{
+  font-family:'Pixelify Sans',cursive;
+  color:var(--holo);font-size:1.1rem;
+  text-shadow:0 0 20px rgba(111,247,255,0.5);
+}
+.laser-verse{
+  font-family:'Spectral',serif;
+  color:var(--warm);font-size:0.95rem;
+  font-style:italic;line-height:1.7;
+  max-width:300px;
+  opacity:0.85;
+}
+.laser-complete{
+  font-family:'Pixelify Sans',cursive;
+  color:var(--gold);font-size:0.85rem;
+  letter-spacing:0.08em;
+}
+.done-btn{
+  font-family:'Pixelify Sans',cursive;
+  background:rgba(111,247,255,0.08);
+  border:1px solid var(--holo);
+  color:var(--holo);
+  padding:10px 28px;border-radius:6px;
+  font-size:0.85rem;cursor:pointer;
+  transition:all 0.2s;margin-top:8px;
+}
+.done-btn:hover,.done-btn:focus{
+  background:rgba(111,247,255,0.15);outline:none;
+}
+
+/* Fade-in utility */
+.fade-in{animation:fadeIn 0.6s ease forwards}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* Font size controls */
+.reading-area.size-small .verse{font-size:0.88rem}
+.reading-area.size-large .verse{font-size:1.15rem;line-height:2}
+</style>
+
+<canvas id="bgCanvas"></canvas>
+
+<div class="screen">
+  <!-- PHASE 0: Boot -->
+  <div id="bootPhase" class="phase active">
+    <div class="laptop-icon">
+      <div class="cursor"></div>
+    </div>
+    <div class="boot-text">ANCIENT TEXT READER v2.1</div>
+    <div class="boot-sub">Recovered from Rocket Module B</div>
+    <div class="boot-text" style="font-size:0.75rem;color:var(--muted)">Chapter data loaded: Genesis</div>
+    <button class="boot-btn" id="startBtn">▸ OPEN READER</button>
+  </div>
+
+  <!-- PHASE 1: Reading -->
+  <div id="readPhase" class="phase">
+    <div class="read-header">
+      <span class="title" id="readTitle">◈ Genesis 1</span>
+      <span class="progress" id="readProgress">CH 1 / 50</span>
+    </div>
+    <div class="read-content">
+      <div class="reading-area" id="readingArea">
+        <div class="chapter-title" id="chapterTitle">Creation of the World</div>
+        <div id="verseContainer"></div>
+      </div>
+      <div class="reading-toolbar">
+        <button class="tool-btn" id="sizeBtn">Aa SIZE</button>
+        <button class="tool-btn" id="bookmarkBtn">🔖 MARK</button>
+      </div>
+    </div>
+    <div class="read-footer">
+      <button class="nav-btn" id="prevPageBtn" disabled>◄ PREV</button>
+      <span class="page-ind" id="pageInd">Page 1 / 1</span>
+      <button class="nav-btn" id="nextPageBtn">DONE ►</button>
+    </div>
+  </div>
+
+  <!-- PHASE 2: Reflection -->
+  <div id="reflectPhase" class="phase">
+    <div class="reflect-card fade-in">
+      <div class="reflect-label">◈ Reflection</div>
+      <div class="reflect-text" id="reflectText"></div>
+    </div>
+    <div class="prayer-card fade-in" style="animation-delay:0.3s">
+      <div class="prayer-label">✙ Prayer Moment</div>
+      <div class="prayer-text" id="prayerText"></div>
+    </div>
+    <button class="continue-btn fade-in" style="animation-delay:0.5s" id="toQuizBtn">CONTINUE ▸</button>
+  </div>
+
+  <!-- PHASE 3: Quiz -->
+  <div id="quizPhase" class="phase">
+    <div class="quiz-card fade-in">
+      <div class="quiz-label">◈ Knowledge Check</div>
+      <div class="quiz-question" id="quizQuestion"></div>
+      <div class="quiz-options" id="quizOptions"></div>
+      <div class="quiz-result" id="quizResult" hidden></div>
+      <div class="gold-earned" id="goldEarned" hidden></div>
+    </div>
+    <button class="continue-btn fade-in" id="toTransmitBtn" hidden>CONTINUE ▸</button>
+  </div>
+
+  <!-- PHASE 4: Transmitter -->
+  <div id="transmitPhase" class="phase">
+    <div class="transmit-device fade-in">
+      <div class="antenna"></div>
+      <div class="screen-icon">
+        <span style="color:var(--holo);font-size:0.5rem">✦</span>
+      </div>
+    </div>
+    <div class="transmit-text fade-in">DATA TRANSMITTER READY</div>
+    <div class="transmit-sub fade-in">
+      Beam today's discoveries back to your home civilization
+    </div>
+    <button class="transmit-btn fade-in" id="fireBtn">◈ TRANSMIT ◈</button>
+  </div>
+
+  <!-- PHASE 5: Laser Finale -->
+  <div id="laserPhase" class="phase">
+    <div class="laser-msg fade-in" id="laserMsg">TRANSMISSION COMPLETE</div>
+    <div class="laser-verse fade-in" id="laserVerse" style="animation-delay:0.4s"></div>
+    <div class="laser-complete fade-in" style="animation-delay:0.8s">
+      +50 GOLD ✦ DEVOTION LOGGED
+    </div>
+    <button class="done-btn fade-in" style="animation-delay:1s" id="doneBtn">RETURN TO MAP ▸</button>
+  </div>
+</div>
+
+<script>
+// === DEVOTION DATA (Genesis Ch.1 sample — full game loads from JSON) ===
+const devotionData = {
+  chapter: 1,
+  title: "Creation of the World",
+  reflection: "God brings order out of chaos, intentionally designing everything with a purpose. Humanity is uniquely made in His image, carrying inherent worth and responsibility. We see a Creator who delights in His work, calling it good.",
+  prayer: "You might want to pray about recognizing the beauty of God’s design in the world around you today.",
+  question: "On which day did God create humans?",
+  options: ["Day 3", "Day 4", "Day 6", "Day 7"],
+  answer: 2
+};
+
+// World English Bible — Genesis 1 (public domain)
+const verses = [
+  "In the beginning, God created the heavens and the earth.",
+  "The earth was formless and empty. Darkness was on the surface of the deep and God’s Spirit was hovering over the surface of the waters.",
+  "God said, “Let there be light,” and there was light.",
+  "God saw the light, and saw that it was good. God divided the light from the darkness.",
+  "God called the light “day,” and the darkness he called “night.” There was evening and there was morning, the first day.",
+  "God said, “Let there be an expanse in the middle of the waters, and let it divide the waters from the waters.”",
+  "God made the expanse, and divided the waters which were under the expanse from the waters which were above the expanse; and it was so.",
+  "God called the expanse “sky.” There was evening and there was morning, a second day.",
+  "God said, “Let the waters under the sky be gathered together to one place, and let the dry land appear;” and it was so.",
+  "God called the dry land “earth,” and the gathering together of the waters he called “seas.” God saw that it was good.",
+  "God said, “Let the earth yield grass, herbs yielding seeds, and fruit trees bearing fruit after their kind, with their seeds in it, on the earth;” and it was so.",
+  "The earth yielded grass, herbs yielding seed after their kind, and trees bearing fruit, with their seeds in it, after their kind; and God saw that it was good.",
+  "There was evening and there was morning, a third day.",
+  "God said, “Let there be lights in the expanse of the sky to divide the day from the night; and let them be for signs to mark seasons, days, and years;”",
+  "and let them be for lights in the expanse of the sky to give light on the earth;” and it was so.",
+  "God made the two great lights: the greater light to rule the day, and the lesser light to rule the night. He also made the stars.",
+  "God set them in the expanse of the sky to give light to the earth,",
+  "and to rule over the day and over the night, and to divide the light from the darkness. God saw that it was good.",
+  "There was evening and there was morning, a fourth day.",
+  "God said, “Let the waters abound with living creatures, and let birds fly above the earth in the open expanse of the sky.”",
+  "God created the large sea creatures and every living creature that moves, with which the waters swarmed, after their kind, and every winged bird after its kind. God saw that it was good.",
+  "God blessed them, saying, “Be fruitful, and multiply, and fill the waters in the seas, and let birds multiply on the earth.”",
+  "There was evening and there was morning, a fifth day.",
+  "God said, “Let the earth produce living creatures after their kind, livestock, creeping things, and animals of the earth after their kind;” and it was so.",
+  "God made the animals of the earth after their kind, and the livestock after their kind, and everything that creeps on the ground after its kind. God saw that it was good.",
+  "God said, “Let’s make man in our image, after our likeness. Let them have dominion over the fish of the sea, and over the birds of the sky, and over the livestock, and over all the earth, and over every creeping thing that creeps on the earth.”",
+  "God created man in his own image. In God’s image he created him; male and female he created them.",
+  "God blessed them. God said to them, “Be fruitful, multiply, fill the earth, and subdue it. Have dominion over the fish of the sea, over the birds of the sky, and over every living thing that moves on the earth.”",
+  "God said, “Behold, I have given you every herb yielding seed, which is on the surface of all the earth, and every tree, which bears fruit yielding seed. It will be your food.",
+  "To every animal of the earth, and to every bird of the sky, and to everything that creeps on the earth, in which there is life, I have given every green herb for food;” and it was so.",
+  "God saw everything that he had made, and, behold, it was very good. There was evening and there was morning, a sixth day."
+];
+
+// === BACKGROUND CANVAS (stars) ===
+const bgCanvas = document.getElementById('bgCanvas');
+const bgCtx = bgCanvas.getContext('2d');
+let stars = [];
+let laserActive = false;
+let laserOpacity = 0;
+let laserParticles = [];
+
+function resizeBg() {
+  bgCanvas.width = window.innerWidth;
+  bgCanvas.height = window.innerHeight;
+  stars = [];
+  for (let i = 0; i < 80; i++) {
+    stars.push({
+      x: Math.random() * bgCanvas.width,
+      y: Math.random() * bgCanvas.height,
+      r: Math.random() * 1.2 + 0.3,
+      twinkle: Math.random() * Math.PI * 2,
+      speed: Math.random() * 0.02 + 0.005
+    });
+  }
+}
+window.addEventListener('resize', resizeBg);
+resizeBg();
+
+function drawBg(t) {
+  bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+  // Stars
+  for (const s of stars) {
+    s.twinkle += s.speed;
+    const a = 0.3 + Math.sin(s.twinkle) * 0.3;
+    bgCtx.beginPath();
+    bgCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    bgCtx.fillStyle = `rgba(255,248,220,${a})`;
+    bgCtx.fill();
+  }
+  // Laser beam
+  if (laserActive) {
+    const cx = bgCanvas.width / 2;
+    const by = bgCanvas.height * 0.55;
+    // Main beam
+    const grad = bgCtx.createLinearGradient(cx, by, cx, 0);
+    grad.addColorStop(0, `rgba(111,247,255,${laserOpacity * 0.9})`);
+    grad.addColorStop(0.3, `rgba(111,247,255,${laserOpacity * 0.6})`);
+    grad.addColorStop(1, `rgba(111,247,255,0)`);
+    bgCtx.save();
+    bgCtx.beginPath();
+    bgCtx.moveTo(cx - 3, by);
+    bgCtx.lineTo(cx - 20, 0);
+    bgCtx.lineTo(cx + 20, 0);
+    bgCtx.lineTo(cx + 3, by);
+    bgCtx.closePath();
+    bgCtx.fillStyle = grad;
+    bgCtx.fill();
+    // Glow
+    bgCtx.shadowColor = 'rgba(111,247,255,0.5)';
+    bgCtx.shadowBlur = 40;
+    bgCtx.beginPath();
+    bgCtx.moveTo(cx - 1, by);
+    bgCtx.lineTo(cx - 8, 0);
+    bgCtx.lineTo(cx + 8, 0);
+    bgCtx.lineTo(cx + 1, by);
+    bgCtx.closePath();
+    bgCtx.fillStyle = `rgba(111,247,255,${laserOpacity * 0.4})`;
+    bgCtx.fill();
+    bgCtx.shadowBlur = 0;
+    bgCtx.restore();
+    // Particles along beam
+    for (const p of laserParticles) {
+      p.y -= p.vy;
+      p.x += Math.sin(t * 0.003 + p.phase) * 0.3;
+      p.life -= 0.008;
+      if (p.life <= 0) {
+        p.y = by - Math.random() * 40;
+        p.x = cx + (Math.random() - 0.5) * 10;
+        p.life = 1;
+      }
+      bgCtx.beginPath();
+      bgCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      bgCtx.fillStyle = `rgba(111,247,255,${p.life * laserOpacity * 0.6})`;
+      bgCtx.fill();
+    }
+  }
+  requestAnimationFrame(drawBg);
+}
+requestAnimationFrame(drawBg);
+
+// === APP STATE ===
+let currentPage = 0;
+const VERSES_PER_PAGE = 6;
+const totalPages = Math.ceil(verses.length / VERSES_PER_PAGE);
+let fontSize = 0; // 0=normal, 1=small, -1 is unused, 1=large
+const sizeClasses = ['', 'size-small', 'size-large'];
+let sizeIndex = 0;
+
+// === PHASE MANAGEMENT ===
+function showPhase(id) {
+  document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// === PHASE 0: Boot ===
+document.getElementById('startBtn').addEventListener('click', () => {
+  showPhase('readPhase');
+  renderPage();
+});
+
+// === PHASE 1: Reading ===
+function renderPage() {
+  const container = document.getElementById('verseContainer');
+  container.innerHTML = '';
+  const start = currentPage * VERSES_PER_PAGE;
+  const end = Math.min(start + VERSES_PER_PAGE, verses.length);
+  for (let i = start; i < end; i++) {
+    const div = document.createElement('div');
+    div.className = 'verse';
+    div.innerHTML = `<span class="vn">${i + 1}</span>${verses[i]}`;
+    container.appendChild(div);
+  }
+  document.getElementById('pageInd').textContent = `Page ${currentPage + 1} / ${totalPages}`;
+  document.getElementById('prevPageBtn').disabled = currentPage === 0;
+  const nextBtn = document.getElementById('nextPageBtn');
+  if (currentPage >= totalPages - 1) {
+    nextBtn.textContent = 'DONE ▸';
+  } else {
+    nextBtn.textContent = 'NEXT ▸';
+  }
+  document.getElementById('readTitle').textContent = `◈ Genesis ${devotionData.chapter}`;
+  document.getElementById('readProgress').textContent = `CH ${devotionData.chapter} / 50`;
+  document.getElementById('chapterTitle').textContent = devotionData.title;
+  // Scroll reading area to top
+  document.getElementById('readingArea').scrollTop = 0;
+}
+
+document.getElementById('prevPageBtn').addEventListener('click', () => {
+  if (currentPage > 0) { currentPage--; renderPage(); }
+});
+
+document.getElementById('nextPageBtn').addEventListener('click', () => {
+  if (currentPage < totalPages - 1) {
+    currentPage++;
+    renderPage();
+  } else {
+    // Done reading — go to reflection
+    showPhase('reflectPhase');
+    document.getElementById('reflectText').textContent = devotionData.reflection;
+    document.getElementById('prayerText').textContent = devotionData.prayer;
+  }
+});
+
+// Font size toggle
+document.getElementById('sizeBtn').addEventListener('click', () => {
+  const area = document.getElementById('readingArea');
+  area.classList.remove(sizeClasses[sizeIndex]);
+  sizeIndex = (sizeIndex + 1) % sizeClasses.length;
+  area.classList.add(sizeClasses[sizeIndex]);
+  const labels = ['Aa MEDIUM', 'Aa SMALL', 'Aa LARGE'];
+  document.getElementById('sizeBtn').textContent = labels[sizeIndex];
+});
+
+// Bookmark (visual feedback only for prototype)
+document.getElementById('bookmarkBtn').addEventListener('click', function() {
+  this.textContent = this.textContent.includes('✓') ? '🔖 MARK' : '🔖 MARKED ✓';
+});
+
+// === PHASE 2: Reflection → Quiz ===
+document.getElementById('toQuizBtn').addEventListener('click', () => {
+  showPhase('quizPhase');
+  document.getElementById('quizQuestion').textContent = devotionData.question;
+  const optContainer = document.getElementById('quizOptions');
+  optContainer.innerHTML = '';
+  devotionData.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => handleAnswer(i, btn));
+    optContainer.appendChild(btn);
+  });
+});
+
+// === PHASE 3: Quiz ===
+let answered = false;
+function handleAnswer(idx, btn) {
+  if (answered) return;
+  answered = true;
+  const correct = idx === devotionData.answer;
+  const allBtns = document.querySelectorAll('.quiz-opt');
+  allBtns.forEach((b, i) => {
+    if (i === devotionData.answer) b.classList.add('correct');
+    else if (i === idx && !correct) b.classList.add('wrong');
+    else b.classList.add('dimmed');
+  });
+  const result = document.getElementById('quizResult');
+  const gold = document.getElementById('goldEarned');
+  result.hidden = false;
+  gold.hidden = false;
+  if (correct) {
+    result.className = 'quiz-result correct-msg';
+    result.textContent = '✦ Correct! Well done, explorer.';
+    gold.textContent = '+30 GOLD';
+  } else {
+    result.className = 'quiz-result wrong-msg';
+    result.textContent = `The answer was: ${devotionData.options[devotionData.answer]}`;
+    gold.textContent = '+10 GOLD (for trying!)';
+  }
+  const contBtn = document.getElementById('toTransmitBtn');
+  contBtn.hidden = false;
+}
+
+// === PHASE 4: Transmitter ===
+document.getElementById('toTransmitBtn').addEventListener('click', () => {
+  showPhase('transmitPhase');
+});
+
+document.getElementById('fireBtn').addEventListener('click', () => {
+  // Init laser particles
+  laserParticles = [];
+  for (let i = 0; i < 30; i++) {
+    laserParticles.push({
+      x: bgCanvas.width / 2,
+      y: bgCanvas.height * 0.55 - Math.random() * bgCanvas.height * 0.5,
+      r: Math.random() * 2 + 0.5,
+      vy: Math.random() * 2 + 1,
+      phase: Math.random() * Math.PI * 2,
+      life: Math.random()
+    });
+  }
+  // Animate laser in
+  laserActive = true;
+  laserOpacity = 0;
+  const fireBtn = document.getElementById('fireBtn');
+  fireBtn.textContent = 'TRANSMITTING...';
+  fireBtn.style.pointerEvents = 'none';
+
+  // Ramp up
+  let frame = 0;
+  function rampUp() {
+    frame++;
+    laserOpacity = Math.min(1, frame / 40);
+    if (frame < 80) {
+      requestAnimationFrame(rampUp);
+    } else {
+      // Hold for a beat, then transition
+      setTimeout(() => {
+        showPhase('laserPhase');
+        document.getElementById('laserVerse').textContent =
+          `"God saw everything that he had made, and, behold, it was very good." — Genesis ${devotionData.chapter}:31`;
+        // Slowly fade laser
+        function fadeOut() {
+          laserOpacity -= 0.008;
+          if (laserOpacity > 0) requestAnimationFrame(fadeOut);
+          else { laserActive = false; laserOpacity = 0; }
+        }
+        setTimeout(fadeOut, 2000);
+      }, 1500);
+    }
+  }
+  rampUp();
+
+  // Play transmit sound
+  playTransmitSound();
+});
+
+// === PHASE 5: Done ===
+document.getElementById('doneBtn').addEventListener('click', () => {
+  // In full game, return to map. Here, restart demo.
+  answered = false;
+  currentPage = 0;
+  showPhase('bootPhase');
+});
+
+// === PROCEDURAL AUDIO ===
+let audioCtx = null;
+function ensureAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playTransmitSound() {
+  try {
+    const ctx = ensureAudio();
+    const now = ctx.currentTime;
+    // Rising tone
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(200, now);
+    osc.frequency.exponentialRampToValueAtTime(1200, now + 1.5);
+    gain.gain.setValueAtTime(0.08, now);
+    gain.gain.linearRampToValueAtTime(0.15, now + 0.8);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 3);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 3);
+    // Shimmer
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.type = 'triangle';
+    osc2.frequency.setValueAtTime(800, now + 0.5);
+    osc2.frequency.exponentialRampToValueAtTime(2400, now + 2);
+    gain2.gain.setValueAtTime(0, now);
+    gain2.gain.linearRampToValueAtTime(0.06, now + 1);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 3.5);
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start(now + 0.5);
+    osc2.stop(now + 3.5);
+  } catch(e) { /* audio not available */ }
+}
+</script>
