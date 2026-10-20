@@ -2,12 +2,16 @@
 
 ## Project Overview
 
-**Bible Explorer** is a mobile-first Bible exploration game where a clumsy astronaut from year 20XX returns to post-humanity Earth to research and revive the lost Christian religion for their home civilization. The game gates exploration progress behind Bible reading — players must complete required chapters before unlocking the next locations.
+**Bible Explorer** is a mobile-first Bible exploration game where ARCHIVIST-07, a curious and clumsy junior botanical archivist, returns to post-humanity Earth on an official recovery expedition after discovering a fragment of the Bible his civilization cannot explain. His private investigation asks what humanity forgot about love, faith, and meaning while recovered Biblical history is transmitted back into the human archive. The game gates exploration progress behind Bible reading — players must complete required chapters before unlocking the next locations.
 
 **Genre:** Educational adventure / Bible devotion game
 **Platform:** Android first (via Capacitor), web-compatible
 **Episode:** Genesis Beta — 11 locations, 50 chapters, English only, free to play
 **Bible Translation:** World English Bible (WEB) — public domain
+
+### Canonical Narrative Foundation
+
+See [`docs/NARRATIVE-FOUNDATION.md`](NARRATIVE-FOUNDATION.md) before writing intro cinematics, protagonist dialogue, Earth-mission lore, or long-term character development. It locks ARCHIVIST-07's motivation, the agape anomaly, the official Earth recovery mission, the transmitter's narrative purpose, and the rule that the central conflict is **calculation vs meaning**, not technology vs Christianity.
 
 ---
 
