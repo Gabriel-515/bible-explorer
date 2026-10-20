@@ -2,7 +2,7 @@
 
 > Last updated: 2026-10-20
 > Status: Genesis Beta — Pre-Alpha
-> Codex: Milestone 1 engineering complete
+> Codex: Milestone 2 playable loop complete; additional exploration scenes remain
 
 ---
 
@@ -43,12 +43,12 @@ Three AIs collaborate on this project. Each has a role:
 - [x] Add Lora font to all HTML files
 
 ### Gemini — Content
-- [ ] Generate `content/genesis-chapters.json` — all 50 Genesis chapters
+- [x] Generate `content/genesis-chapters.json` — all 50 Genesis chapters
   - Format: `[{"chapter":1,"verses":[{"number":1,"text":"..."},...]},...]`
   - Source: World English Bible (public domain)
-- [ ] Generate `content/svg-descriptions.json` — illustration guide for each chapter
+- [x] Generate `content/genesis-visual-guide.json` — illustration guide for each chapter
   - Format: `[{"chapter":1,"title":"Creation","elements":["stars","plants","light rays"],"mood":"awe"},...]`
-- [ ] Write scene lore for all 11 locations → `docs/SCENE-GUIDE.md`
+- [x] Write scene lore for all 11 locations → `docs/SCENE-GUIDE.md`
   - Historical context, geography, atmosphere description
   - What the astronaut discovers at each location
   - Key visual elements for pixel art scenes
@@ -66,12 +66,12 @@ Three AIs collaborate on this project. Each has a role:
 
 ## Milestone 2: Playable Loop
 
-- [ ] Chapter gating — lock Command Center destinations behind chapter completion
-- [ ] Full reading flow — load any chapter from genesis-chapters.json
-- [ ] Gold rewards — quiz completion awards gold
-- [ ] Scene transitions — hub → reading → exploration → back to hub
+- [x] Chapter gating — lock Command Center destinations behind chapter completion
+- [x] Full reading flow — load any chapter from genesis-chapters.json
+- [x] Gold rewards — quiz completion awards +30 correct / +10 trying once per chapter
+- [x] Scene transitions — hub → reading → unlocked exploration → back to hub
 - [ ] 3+ exploration scenes playable
-- [ ] Basic save/load on app restart
+- [x] Basic save/load on app restart
 
 ---
 
@@ -88,6 +88,9 @@ Three AIs collaborate on this project. Each has a role:
 ---
 
 ## Completed
+- [x] Milestone 2 core loop — dynamic 50-chapter reader, gating, rewards, transitions, and persisted progression (Codex)
+- [x] Full World English Bible Genesis dataset — 50 chapters / 1,533 verses
+- [x] Genesis visual guide and 11-location scene lore
 - [x] Milestone 1 engineering foundation — shared state, dual reader styles, page navigation, and skin persistence (Codex)
 - [x] Spaceship hub with 5 stations + wardrobe (Claude)
 - [x] Tower of Babel exploration scene with full story (Claude)

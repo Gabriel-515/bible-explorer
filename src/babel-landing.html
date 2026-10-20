@@ -46,6 +46,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelate
 .start{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.4cqw;background:rgba(13,16,36,.42)}
 .big{font-family:var(--f-pixel);font-size:clamp(16px,3.4cqw,26px);background:var(--sand);color:var(--sand-ink);border:0;border-radius:8px;padding:1.4cqw 3.4cqw;cursor:pointer;box-shadow:0 4px 0 var(--sand-deep)}
 .big:active{transform:translateY(2px);box-shadow:0 2px 0 var(--sand-deep)}
+.big:disabled{cursor:not-allowed;filter:grayscale(.6);opacity:.78;box-shadow:none}
 .start p{font-family:var(--f-pixel);font-size:clamp(11px,2cqw,15px);margin:0;text-align:center;padding-inline:4%}
 .again{position:absolute;right:2.5%;bottom:4%;font-family:var(--f-pixel);font-size:clamp(11px,2.2cqw,15px);background:var(--panel-2);color:var(--ink);border:2px solid var(--holo);border-radius:6px;padding:.8cqw 2cqw;cursor:pointer}
 .hint-rotate{display:none;font-size:13px;color:var(--muted);margin:0;text-align:center}
@@ -74,6 +75,7 @@ footer{font-size:13px;color:var(--muted)}
       <h1>Babel Landing</h1>
     </div>
     <div class="controls">
+      <button class="ctl" id="backBtn" type="button">◀ Back to Ship</button>
       <button class="ctl" id="soundBtn" type="button" aria-pressed="true">Sound on</button>
       <button class="ctl" id="replayBtn" type="button">Replay</button>
     </div>
@@ -130,6 +132,7 @@ footer{font-size:13px;color:var(--muted)}
   <footer>Prototype. Scripture from the World English Bible (public domain). Art and sound are code-generated placeholders.</footer>
 </div>
 
+<script src="game-state.js"></script>
 <script>
 (function(){
 const $=id=>document.getElementById(id);
@@ -484,16 +487,25 @@ async function story(){
   laserBeam=0;
   await S(wait(600));
   A.pose='stand';
-  await S(say([{who:'Explorer',text:'They\'ll know about Babel now. One more step to reviving the old faith.'},{who:'Ship',text:'+50 Gold. Devotion logged. Next chapter unlocked.'}]));
+  GameState.completeMission(5);
+  await S(say([{who:'Explorer',text:'They\'ll know about Babel now. One more step to reviving the old faith.'},{who:'Ship',text:'Expedition saved. Plain of Shinar marked complete.'}]));
   [523.25,659.25,783.99,1046.5,1318.5].forEach((f,i)=>tone(f,.3,'triangle',.1,i*.08));
-  objective('Devotion complete! Next stop: Garden of Eden (coming soon).');
+  objective('Expedition complete! Return to the ship when ready.');
   const ag=$('againBtn');ag.hidden=false;ag.onclick=e=>{e.stopPropagation();story().catch(()=>{});};
 }
 
 function begin(e){if(e)e.stopPropagation();audioInit();if(AC&&AC.resume)AC.resume();$('start').hidden=true;story().catch(()=>{});}
 $('startBtn').addEventListener('click',begin);
 $('replayBtn').addEventListener('click',begin);
+$('backBtn').addEventListener('click',()=>{window.location.href='spaceship-hub.html';});
 $('soundBtn').addEventListener('click',()=>{soundOn=!soundOn;if(master)master.gain.value=soundOn?1:0;$('soundBtn').textContent=soundOn?'Sound on':'Sound off';$('soundBtn').setAttribute('aria-pressed',String(soundOn));});
 $('dialog').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('dialog').click();}});
+const missionAccess=GameState.getLocationProgress(5);
+if(!missionAccess||!missionAccess.unlocked){
+  $('startBtn').disabled=true;
+  $('replayBtn').disabled=true;
+  $('startBtn').textContent='READ GENESIS 10–11';
+  objective('Mission locked. Complete Genesis 10 and 11 in the Bible Reader.');
+}
 })();
 </script>

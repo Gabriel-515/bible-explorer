@@ -52,6 +52,20 @@ canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelate
 .status .gold{color:var(--sand)}
 .status .ch{color:var(--holo)}
 footer{font-size:13px;color:var(--muted)}
+.mission-overlay{position:fixed;inset:0;z-index:100;background:rgba(5,7,20,.94);display:grid;place-items:center;padding:18px}
+.mission-panel{width:min(760px,100%);max-height:min(86dvh,760px);overflow:auto;background:var(--panel);border:2px solid var(--holo);border-radius:12px;padding:18px;box-shadow:0 0 38px rgba(111,247,255,.14)}
+.mission-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.mission-head h2{font-family:var(--f-pixel);font-size:22px;color:var(--holo);margin:0}
+.mission-head p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.mission-close{font-family:var(--f-pixel);background:var(--panel-2);color:var(--ink);border:2px solid var(--line);border-radius:6px;padding:7px 11px;cursor:pointer}
+.mission-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.mission{font-family:var(--f-body);text-align:left;background:var(--panel-2);color:var(--ink);border:2px solid var(--line);border-radius:8px;padding:11px;cursor:pointer}
+.mission:not(:disabled):hover{border-color:var(--holo)}
+.mission:disabled{cursor:not-allowed;opacity:.55}
+.mission strong{display:block;font-family:var(--f-pixel);font-size:15px;color:var(--sand)}
+.mission span{display:block;font-size:13px;color:var(--muted);margin-top:3px}
+.mission.ready{border-color:var(--holo)}
+.mission.done strong{color:var(--holo)}
 @media(prefers-reduced-motion:reduce){.ring,.more{animation:none}}
 </style>
 
@@ -101,6 +115,19 @@ footer{font-size:13px;color:var(--muted)}
     <p class="hint-rotate">Tip: turn your phone sideways for a bigger view.</p>
   </div>
   <footer>Prototype. Tap anywhere on the floor to walk. Interact with glowing stations.</footer>
+</div>
+
+<div class="mission-overlay" id="missionOverlay" hidden>
+  <section class="mission-panel" role="dialog" aria-modal="true" aria-labelledby="missionTitle">
+    <div class="mission-head">
+      <div>
+        <h2 id="missionTitle">Genesis Expeditions</h2>
+        <p>Complete every listed chapter to unlock its destination.</p>
+      </div>
+      <button class="mission-close" id="missionCloseBtn" type="button">Close</button>
+    </div>
+    <div class="mission-list" id="missionList"></div>
+  </section>
 </div>
 
 <script src="game-state.js"></script>
@@ -330,7 +357,7 @@ function updateStatus(){
   playerState=GameState.getState();
   currentSkin=playerState.currentSkin;
   $('goldDisplay').textContent=`✦ ${playerState.gold} Gold`;
-  $('chDisplay').textContent=`◈ Genesis · Ch ${playerState.currentChapter} / 50`;
+  $('chDisplay').textContent=`◈ ${playerState.chaptersRead.length} / 50 read · Next Ch ${playerState.currentChapter}`;
 }
 updateStatus();
 
@@ -519,6 +546,48 @@ function showMsg(who,text,cls){
 }
 
 // === STATION INTERACTIONS ===
+function chapterLabel(chapters){
+  if(chapters.length===1)return `Genesis ${chapters[0]}`;
+  return `Genesis ${chapters[0]}–${chapters[chapters.length-1]}`;
+}
+
+function showMissions(){
+  const list=$('missionList');
+  list.innerHTML='';
+  GameState.locations.forEach(location=>{
+    const progress=GameState.getLocationProgress(location.id);
+    const button=document.createElement('button');
+    button.type='button';
+    button.className='mission'+(progress.unlocked?' ready':'')+(progress.completed?' done':'');
+    button.disabled=!progress.unlocked;
+    const title=document.createElement('strong');
+    title.textContent=`${location.id}. ${location.name}`;
+    const detail=document.createElement('span');
+    const count=`${progress.completedChapters.length}/${location.chapters.length} chapters`;
+    detail.textContent=!progress.unlocked
+      ? `🔒 ${chapterLabel(location.chapters)} · ${count}`
+      : progress.completed
+        ? `✓ Expedition complete · ${chapterLabel(location.chapters)}`
+        : location.scene
+          ? `READY · ${chapterLabel(location.chapters)}`
+          : `UNLOCKED · Scene module pending`;
+    button.append(title,detail);
+    if(progress.unlocked){
+      button.addEventListener('click',()=>{
+        if(location.scene){
+          window.location.href=location.scene;
+        }else{
+          $('missionOverlay').hidden=true;
+          showMsg('Ship',`${location.name} is unlocked. Its exploration module is still being restored.`,'ship');
+        }
+      });
+    }
+    list.appendChild(button);
+  });
+  $('missionOverlay').hidden=false;
+  $('missionCloseBtn').focus();
+}
+
 $('readerBtn').addEventListener('click',e=>{
   e.stopPropagation();sfxSelect();
   showMsg('Ship','Opening Ancient Text Reader... Genesis chapters loaded.','ship');
@@ -528,10 +597,12 @@ $('readerBtn').addEventListener('click',e=>{
 
 $('commandBtn').addEventListener('click',e=>{
   e.stopPropagation();sfxSelect();
-  showMsg('Ship','Next mission: Plain of Shinar. Genesis 11. Ready to launch.','ship');
-  // In full game: plays rocket launch animation → loads exploration scene
-  setTimeout(()=>showMsg('System','[Launch sequence → Babel Landing scene would load]','sys'),2500);
+  showMsg('Ship','Command Center online. Checking Bible archive clearance...','ship');
+  showMissions();
 });
+
+$('missionCloseBtn').addEventListener('click',()=>{$('missionOverlay').hidden=true;sfxStep();});
+$('missionOverlay').addEventListener('click',e=>{if(e.target===$('missionOverlay'))$('missionOverlay').hidden=true;});
 
 $('journalBtn').addEventListener('click',e=>{
   e.stopPropagation();sfxSelect();
@@ -541,9 +612,9 @@ $('journalBtn').addEventListener('click',e=>{
 
 $('bedBtn').addEventListener('click',e=>{
   e.stopPropagation();sfxSelect();
-  showMsg('Explorer','Maybe a quick rest. Space travel is exhausting.');
-  // In full game: save game + advance to next day
-  setTimeout(()=>showMsg('System','[Save game + rest until tomorrow]','sys'),2000);
+  playerState=GameState.save();
+  const savedAt=new Date(playerState.lastSavedAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  showMsg('Ship',`Progress saved at ${savedAt}. Your mission will resume after restart.`,'ship');
 });
 
 // === WARDROBE OVERLAY ===

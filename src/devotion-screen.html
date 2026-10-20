@@ -489,8 +489,8 @@ body{
     </div>
     <div class="boot-text">ANCIENT TEXT READER v2.1</div>
     <div class="boot-sub">Recovered from Rocket Module B</div>
-    <div class="boot-text" style="font-size:0.75rem;color:var(--muted)">Chapter data loaded: Genesis</div>
-    <button class="boot-btn" id="startBtn">▸ OPEN READER</button>
+    <div class="boot-text" id="loadStatus" style="font-size:0.75rem;color:var(--muted)">Loading Genesis archive...</div>
+    <button class="boot-btn" id="startBtn" disabled>LOADING...</button>
   </div>
 
   <!-- PHASE 1: Reading -->
@@ -566,60 +566,15 @@ body{
   <div id="laserPhase" class="phase">
     <div class="laser-msg fade-in" id="laserMsg">TRANSMISSION COMPLETE</div>
     <div class="laser-verse fade-in" id="laserVerse" style="animation-delay:0.4s"></div>
-    <div class="laser-complete fade-in" style="animation-delay:0.8s">
-      +50 GOLD ✦ DEVOTION LOGGED
-    </div>
+    <div class="laser-complete fade-in" id="completionSummary" style="animation-delay:0.8s">DEVOTION LOGGED</div>
     <button class="done-btn fade-in" style="animation-delay:1s" id="doneBtn">RETURN TO MAP ▸</button>
   </div>
 </div>
 
 <script src="game-state.js"></script>
 <script>
-// === DEVOTION DATA (Genesis Ch.1 sample — full game loads from JSON) ===
-const devotionData = {
-  chapter: 1,
-  title: "Creation of the World",
-  reflection: "God brings order out of chaos, intentionally designing everything with a purpose. Humanity is uniquely made in His image, carrying inherent worth and responsibility. We see a Creator who delights in His work, calling it good.",
-  prayer: "You might want to pray about recognizing the beauty of God’s design in the world around you today.",
-  question: "On which day did God create humans?",
-  options: ["Day 3", "Day 4", "Day 6", "Day 7"],
-  answer: 2
-};
-
-// World English Bible — Genesis 1 (public domain)
-const verses = [
-  "In the beginning, God created the heavens and the earth.",
-  "The earth was formless and empty. Darkness was on the surface of the deep and God’s Spirit was hovering over the surface of the waters.",
-  "God said, “Let there be light,” and there was light.",
-  "God saw the light, and saw that it was good. God divided the light from the darkness.",
-  "God called the light “day,” and the darkness he called “night.” There was evening and there was morning, the first day.",
-  "God said, “Let there be an expanse in the middle of the waters, and let it divide the waters from the waters.”",
-  "God made the expanse, and divided the waters which were under the expanse from the waters which were above the expanse; and it was so.",
-  "God called the expanse “sky.” There was evening and there was morning, a second day.",
-  "God said, “Let the waters under the sky be gathered together to one place, and let the dry land appear;” and it was so.",
-  "God called the dry land “earth,” and the gathering together of the waters he called “seas.” God saw that it was good.",
-  "God said, “Let the earth yield grass, herbs yielding seeds, and fruit trees bearing fruit after their kind, with their seeds in it, on the earth;” and it was so.",
-  "The earth yielded grass, herbs yielding seed after their kind, and trees bearing fruit, with their seeds in it, after their kind; and God saw that it was good.",
-  "There was evening and there was morning, a third day.",
-  "God said, “Let there be lights in the expanse of the sky to divide the day from the night; and let them be for signs to mark seasons, days, and years;”",
-  "and let them be for lights in the expanse of the sky to give light on the earth;” and it was so.",
-  "God made the two great lights: the greater light to rule the day, and the lesser light to rule the night. He also made the stars.",
-  "God set them in the expanse of the sky to give light to the earth,",
-  "and to rule over the day and over the night, and to divide the light from the darkness. God saw that it was good.",
-  "There was evening and there was morning, a fourth day.",
-  "God said, “Let the waters abound with living creatures, and let birds fly above the earth in the open expanse of the sky.”",
-  "God created the large sea creatures and every living creature that moves, with which the waters swarmed, after their kind, and every winged bird after its kind. God saw that it was good.",
-  "God blessed them, saying, “Be fruitful, and multiply, and fill the waters in the seas, and let birds multiply on the earth.”",
-  "There was evening and there was morning, a fifth day.",
-  "God said, “Let the earth produce living creatures after their kind, livestock, creeping things, and animals of the earth after their kind;” and it was so.",
-  "God made the animals of the earth after their kind, and the livestock after their kind, and everything that creeps on the ground after its kind. God saw that it was good.",
-  "God said, “Let’s make man in our image, after our likeness. Let them have dominion over the fish of the sea, and over the birds of the sky, and over the livestock, and over all the earth, and over every creeping thing that creeps on the earth.”",
-  "God created man in his own image. In God’s image he created him; male and female he created them.",
-  "God blessed them. God said to them, “Be fruitful, multiply, fill the earth, and subdue it. Have dominion over the fish of the sea, over the birds of the sky, and over every living thing that moves on the earth.”",
-  "God said, “Behold, I have given you every herb yielding seed, which is on the surface of all the earth, and every tree, which bears fruit yielding seed. It will be your food.",
-  "To every animal of the earth, and to every bird of the sky, and to everything that creeps on the earth, in which there is life, I have given every green herb for food;” and it was so.",
-  "God saw everything that he had made, and, behold, it was very good. There was evening and there was morning, a sixth day."
-];
+let devotionData = null;
+let verses = [];
 
 // === BACKGROUND CANVAS (stars) ===
 const bgCanvas = document.getElementById('bgCanvas');
@@ -709,14 +664,46 @@ function drawBg(t) {
 requestAnimationFrame(drawBg);
 
 // === APP STATE ===
-const requestedChapter = Number(new URLSearchParams(window.location.search).get('chapter')) || GameState.get('currentChapter');
-const activeChapter = requestedChapter === devotionData.chapter ? requestedChapter : devotionData.chapter;
+const chapterParam = Number(new URLSearchParams(window.location.search).get('chapter'));
+const requestedChapter = Number.isInteger(chapterParam) && chapterParam >= 1 && chapterParam <= 50
+  ? chapterParam
+  : GameState.get('currentChapter');
+const activeChapter = requestedChapter;
 let playerState = GameState.set('currentChapter', activeChapter);
 let currentPage = 0;
 const VERSES_PER_PAGE = 6;
-const totalPages = Math.ceil(verses.length / VERSES_PER_PAGE);
+let totalPages = 0;
 const sizeClasses = ['', 'size-small', 'size-large'];
 let sizeIndex = 0;
+let rewardAwarded = 0;
+let chapterCompleted = playerState.chaptersRead.includes(activeChapter);
+
+async function initializeReader() {
+  const loadStatus = document.getElementById('loadStatus');
+  const startBtn = document.getElementById('startBtn');
+  try {
+    const [chapterResponse, devotionResponse] = await Promise.all([
+      fetch('../content/genesis-chapters.json'),
+      fetch('../content/genesis-devotions.json')
+    ]);
+    if (!chapterResponse.ok || !devotionResponse.ok) throw new Error('Genesis archive unavailable');
+    const [chapters, devotions] = await Promise.all([chapterResponse.json(), devotionResponse.json()]);
+    const chapterData = chapters.find(item => Number(item.chapter) === activeChapter);
+    devotionData = devotions.find(item => Number(item.chapter) === activeChapter);
+    if (!chapterData || !devotionData || !Array.isArray(chapterData.verses) || !chapterData.verses.length) {
+      throw new Error(`Genesis ${activeChapter} is missing from the archive`);
+    }
+    verses = chapterData.verses.map(verse => ({ number: Number(verse.number), text: String(verse.text) }));
+    totalPages = Math.ceil(verses.length / VERSES_PER_PAGE);
+    loadStatus.textContent = `Genesis ${activeChapter} ready · ${verses.length} verses`;
+    startBtn.disabled = false;
+    startBtn.textContent = '▸ OPEN READER';
+  } catch (error) {
+    loadStatus.textContent = 'Could not load the Genesis archive. Run the game from a local web server.';
+    startBtn.textContent = 'ARCHIVE OFFLINE';
+    console.error(error);
+  }
+}
 
 function applyReadingStyle(style) {
   const readingStyle = style === 'futuristic' ? 'futuristic' : 'hybrid';
@@ -733,7 +720,8 @@ function setReadingStyle(style) {
 }
 
 function currentBookmark() {
-  return { chapter: devotionData.chapter, verse: currentPage * VERSES_PER_PAGE + 1 };
+  const firstVerse = verses[currentPage * VERSES_PER_PAGE];
+  return { chapter: activeChapter, verse: firstVerse ? firstVerse.number : 1 };
 }
 
 function isCurrentPageBookmarked() {
@@ -752,6 +740,7 @@ document.getElementById('backToShipBtn').addEventListener('click', () => {
 document.getElementById('futuristicStyleBtn').addEventListener('click', () => setReadingStyle('futuristic'));
 document.getElementById('hybridStyleBtn').addEventListener('click', () => setReadingStyle('hybrid'));
 applyReadingStyle(playerState.readingStyle);
+initializeReader();
 
 // === PHASE MANAGEMENT ===
 function showPhase(id) {
@@ -774,7 +763,10 @@ function renderPage() {
   for (let i = start; i < end; i++) {
     const div = document.createElement('div');
     div.className = 'verse';
-    div.innerHTML = `<span class="vn">${i + 1}</span>${verses[i]}`;
+    const number = document.createElement('span');
+    number.className = 'vn';
+    number.textContent = verses[i].number;
+    div.append(number, document.createTextNode(verses[i].text));
     container.appendChild(div);
   }
   document.getElementById('pageInd').textContent = `Page ${currentPage + 1} / ${totalPages}`;
@@ -785,8 +777,8 @@ function renderPage() {
   } else {
     nextBtn.textContent = 'NEXT ▸';
   }
-  document.getElementById('readTitle').textContent = `◈ Genesis ${devotionData.chapter}`;
-  document.getElementById('readProgress').textContent = `CH ${devotionData.chapter} / 50`;
+  document.getElementById('readTitle').textContent = `◈ Genesis ${activeChapter}`;
+  document.getElementById('readProgress').textContent = `CH ${activeChapter} / 50`;
   document.getElementById('chapterTitle').textContent = devotionData.title;
   updateBookmarkButton();
   // Scroll reading area to top
@@ -860,15 +852,19 @@ function handleAnswer(idx, btn) {
   const gold = document.getElementById('goldEarned');
   result.hidden = false;
   gold.hidden = false;
+  const reward = GameState.awardQuiz(activeChapter, correct);
+  playerState = reward.state;
+  rewardAwarded = reward.awarded;
   if (correct) {
     result.className = 'quiz-result correct-msg';
     result.textContent = '✦ Correct! Well done, explorer.';
-    gold.textContent = '+30 GOLD';
   } else {
     result.className = 'quiz-result wrong-msg';
     result.textContent = `The answer was: ${devotionData.options[devotionData.answer]}`;
-    gold.textContent = '+10 GOLD (for trying!)';
   }
+  gold.textContent = rewardAwarded
+    ? `+${rewardAwarded} GOLD${correct ? '' : ' (for trying!)'}`
+    : 'GOLD REWARD ALREADY CLAIMED';
   const contBtn = document.getElementById('toTransmitBtn');
   contBtn.hidden = false;
 }
@@ -879,6 +875,10 @@ document.getElementById('toTransmitBtn').addEventListener('click', () => {
 });
 
 document.getElementById('fireBtn').addEventListener('click', () => {
+  if (!chapterCompleted) {
+    playerState = GameState.completeChapter(activeChapter);
+    chapterCompleted = true;
+  }
   // Init laser particles
   laserParticles = [];
   for (let i = 0; i < 30; i++) {
@@ -909,8 +909,20 @@ document.getElementById('fireBtn').addEventListener('click', () => {
       // Hold for a beat, then transition
       setTimeout(() => {
         showPhase('laserPhase');
+        const lastVerse = verses[verses.length - 1];
         document.getElementById('laserVerse').textContent =
-          `"God saw everything that he had made, and, behold, it was very good." — Genesis ${devotionData.chapter}:31`;
+          `“${lastVerse.text}” — Genesis ${activeChapter}:${lastVerse.number}`;
+        document.getElementById('completionSummary').textContent = rewardAwarded
+          ? `+${rewardAwarded} GOLD ✦ CHAPTER SAVED`
+          : 'CHAPTER SAVED ✦ PROGRESS RESTORED';
+        const mission = GameState.locations.find(location =>
+          location.scene &&
+          location.chapters[location.chapters.length - 1] === activeChapter &&
+          GameState.getLocationProgress(location.id).unlocked
+        );
+        const doneBtn = document.getElementById('doneBtn');
+        doneBtn.dataset.destination = mission ? mission.scene : 'spaceship-hub.html';
+        doneBtn.textContent = mission ? `EXPLORE ${mission.name.toUpperCase()} ▸` : 'RETURN TO SHIP ▸';
         // Slowly fade laser
         function fadeOut() {
           laserOpacity -= 0.008;
@@ -929,7 +941,7 @@ document.getElementById('fireBtn').addEventListener('click', () => {
 
 // === PHASE 5: Done ===
 document.getElementById('doneBtn').addEventListener('click', () => {
-  window.location.href = 'spaceship-hub.html';
+  window.location.href = document.getElementById('doneBtn').dataset.destination || 'spaceship-hub.html';
 });
 
 // === PROCEDURAL AUDIO ===
