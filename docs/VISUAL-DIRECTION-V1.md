@@ -233,35 +233,61 @@ Movement should feel quiet, deliberate, and curious.
 
 No action-hero body language.
 
-## 9.1 Approved Eden Keyframe Reference
+## 9.1 Approved Eden Keyframe Synthesis
 
-**Selected reference:** ChatGPT-generated **Eden Concept Version 3**.
+**Final target is a synthesis of the three concept directions, not a literal copy of one image.**
 
-This is the authoritative visual north star for Eden Visual Spike 02.
+### Camera / framing — use Concept Version 2
 
-Key qualities to preserve:
-- mobile-first composition, not a giant PC-scale game
-- cinematic side-view framing
-- ARCHIVIST-07 readable on a phone while still feeling small
-- enormous Tree of Knowledge dominating the right side
-- open mist-filled valley through the center
-- clear walkable ledge/path on the left
-- strong foreground framing without blocking gameplay
-- pale lavender / peach dawn light
-- dusty blue atmospheric distance
-- warm bone stone
-- desaturated sage foliage
+Use the **Version 2 camera distance** as the gameplay framing target:
+- wide enough to preserve cinematic scale
+- close enough that ARCHIVIST-07 remains readable on a phone
+- clear foreground path and gameplay plane
+- strong left-to-right composition
+- mobile-first readability over PC-scale spectacle
+
+### World content / environment — use Concept Version 1
+
+Use **Version 1 as the environment-content reference**:
+- ancient cove / valley feeling
+- hidden cave-like spaces
+- colossal Tree of Knowledge
+- distant ruins and broken monumental forms
+- layered cliffs, arches, terraces, and river channels
+- stronger sense of discovery and places continuing beyond the visible frame
+- roots forming passages / natural corridors
+- environmental mystery without horror
+
+The ruins must remain subordinate to Eden's ancient natural world. Eden should feel like impossible sacred nature with traces of ancient order, not an abandoned fantasy city.
+
+### Rendering / art style — use Concept Version 3
+
+Use **Version 3 as the final rendering and art-style reference**:
+- polished modern pixel / pixel-inspired 2D
+- soft lavender, peach, dusty blue, sage and warm bone palette
+- crisp readable silhouettes
+- rich but calm detail
+- strong atmospheric perspective
+- mist-filled depth
+- gentle dawn light
+- healing, reflective, devotional tone
 - restrained amber/gold life hints
-- layered depth inspired by Hyper Light Drifter
-- softness, negative space, and tiny-character/huge-world framing inspired by Planet of Lana
-- peaceful, healing, devotional mood
+- HLD-style depth discipline with Planet-of-Lana-style softness
 
-The Godot implementation should **translate this composition**, not reinterpret it into a flat programmer-art scene.
+### Canonical synthesis
 
-Expected repository asset path once the image is saved into the project:
-`art/reference/eden-keyframe-v3.png`
+> **Camera of V2 + world of V1 + art style of V3.**
 
-If that asset is present, Claude/Codex should treat it as the primary image reference together with this document.
+This is the authoritative visual target for **Eden Visual Spike 02**.
+
+Expected reference assets once saved into the project:
+- `art/reference/eden-concept-v1.png`
+- `art/reference/eden-concept-v2.png`
+- `art/reference/eden-concept-v3.png`
+
+Claude/Codex should not choose one image and discard the others. Each reference has a specific role defined above.
+
+The Godot implementation should **translate this synthesis**, not reinterpret it into a flat programmer-art scene.
 
 ## 10. EDEN VISUAL SPIKE 02 — Keyframe
 
