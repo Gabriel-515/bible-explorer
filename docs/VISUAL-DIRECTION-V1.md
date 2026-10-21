@@ -233,6 +233,36 @@ Movement should feel quiet, deliberate, and curious.
 
 No action-hero body language.
 
+## 9.1 Approved Eden Keyframe Reference
+
+**Selected reference:** ChatGPT-generated **Eden Concept Version 3**.
+
+This is the authoritative visual north star for Eden Visual Spike 02.
+
+Key qualities to preserve:
+- mobile-first composition, not a giant PC-scale game
+- cinematic side-view framing
+- ARCHIVIST-07 readable on a phone while still feeling small
+- enormous Tree of Knowledge dominating the right side
+- open mist-filled valley through the center
+- clear walkable ledge/path on the left
+- strong foreground framing without blocking gameplay
+- pale lavender / peach dawn light
+- dusty blue atmospheric distance
+- warm bone stone
+- desaturated sage foliage
+- restrained amber/gold life hints
+- layered depth inspired by Hyper Light Drifter
+- softness, negative space, and tiny-character/huge-world framing inspired by Planet of Lana
+- peaceful, healing, devotional mood
+
+The Godot implementation should **translate this composition**, not reinterpret it into a flat programmer-art scene.
+
+Expected repository asset path once the image is saved into the project:
+`art/reference/eden-keyframe-v3.png`
+
+If that asset is present, Claude/Codex should treat it as the primary image reference together with this document.
+
 ## 10. EDEN VISUAL SPIKE 02 — Keyframe
 
 ### Scene title
