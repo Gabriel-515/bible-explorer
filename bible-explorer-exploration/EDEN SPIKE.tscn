@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://dr2a3bm55575c"]
+
+[ext_resource type="Script" path="res://astronaut.gd" id="1_p88hv"]
+[ext_resource type="Texture2D" uid="uid://cv8ipjsdq47ff" path="res://icon.svg" id="2_1sloq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jh35h"]
+size = Vector2(10, 18)
+
+[node name="EDENSPIKE" type="Node2D" unique_id=845951046]
+
+[node name="FARBACKGROUND" type="Parallax2D" parent="." unique_id=1055898798]
+scroll_scale = Vector2(0.15, 1)
+
+[node name="FAR MIST" type="Parallax2D" parent="." unique_id=2047823956]
+scroll_scale = Vector2(0.3, 1)
+
+[node name="MIDGROUND" type="Parallax2D" parent="." unique_id=1627051736]
+scroll_scale = Vector2(0.55, 1)
+
+[node name="WORLD" type="Node2D" parent="." unique_id=1042946536]
+
+[node name="Astronaut" type="CharacterBody2D" parent="WORLD" unique_id=1867578375]
+position = Vector2(100, 170)
+script = ExtResource("1_p88hv")
+
+[node name="Camera2D" type="Camera2D" parent="WORLD/Astronaut" unique_id=38554477]
+position_smoothing_enabled = true
+position_smoothing_speed = 4.0
+drag_horizontal_enabled = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WORLD/Astronaut" unique_id=2015231800]
+shape = SubResource("RectangleShape2D_jh35h")
+
+[node name="Sprite2D" type="Sprite2D" parent="WORLD/Astronaut" unique_id=395092641]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_1sloq")
+centered = false
+
+[node name="FOREGROUND" type="Parallax2D" parent="." unique_id=1092555301]
+scroll_scale = Vector2(1.15, 1)
+
+[node name="FOGPARTICLES" type="GPUParticles2D" parent="." unique_id=270800343]
+
+[node name="RECONSTRUCTLAYER" type="CanvasLayer" parent="." unique_id=204618208]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=146543513]
+layer = 10

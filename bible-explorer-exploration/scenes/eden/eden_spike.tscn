@@ -1,0 +1,286 @@
+[gd_scene format=3 uid="uid://c6nbaget3y78s"]
+
+[ext_resource type="Script" path="res://scripts/astronaut.gd" id="1_astronaut"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/sky.png" id="2_sky"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/distant_mountains.png" id="3_mountains"]
+[ext_resource type="Texture2D" path="res://assets/midground/petrified_canopy.png" id="4_canopy"]
+[ext_resource type="Texture2D" path="res://assets/midground/mist.png" id="5_mist"]
+[ext_resource type="Texture2D" path="res://assets/midground/cliffs_terraces.png" id="6_cliffs"]
+[ext_resource type="Texture2D" path="res://assets/midground/tree_of_knowledge.png" id="7_tree"]
+[ext_resource type="Texture2D" path="res://assets/midground/gameplay_ledge.png" id="8_ledge"]
+[ext_resource type="Texture2D" path="res://assets/foreground/foreground_vegetation.png" id="9_fg"]
+[ext_resource type="Texture2D" path="res://assets/particles/dust_motes.png" id="10_dust"]
+[ext_resource type="Texture2D" path="res://assets/characters/archivist_07.png" id="11_archivist"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/eden_master_panorama_v1.png" id="12_panorama"]
+[ext_resource type="Script" path="res://scripts/eden_spike.gd" id="13_eden_spike"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/eden_layers/eden_far.png" id="14_eden_far"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/eden_layers/eden_mid_far.png" id="15_eden_mid_far"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/eden_layers/eden_mid.png" id="16_eden_mid"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/eden_layers/eden_playable.png" id="17_eden_playable"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/eden_layers/eden_foreground.png" id="18_eden_foreground"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_astronaut"]
+size = Vector2(8, 18)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fog"]
+emission_shape = 3
+emission_box_extents = Vector3(575, 70, 1)
+direction = Vector3(0.15, -1, 0)
+spread = 50.0
+gravity = Vector3(0, -0.5, 0)
+initial_velocity_min = 0.3
+initial_velocity_max = 1.8
+scale_min = 0.4
+scale_max = 1.2
+color = Color(0.82, 0.77, 0.92, 0.38)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ui"]
+font_size = 8
+font_color = Color(0.86, 0.95, 0.92, 1)
+outline_size = 2
+outline_color = Color(0.02, 0.04, 0.06, 1)
+
+[node name="EdenSpike" type="Node2D"]
+script = ExtResource("13_eden_spike")
+
+[node name="EdenMasterPanorama" type="Sprite2D" parent="."]
+z_index = -100
+position = Vector2(0, -20)
+scale = Vector2(0.353591, 0.353591)
+texture_filter = 1
+texture = ExtResource("12_panorama")
+centered = false
+
+[node name="DecomposedLayers" type="Node2D" parent="."]
+visible = false
+
+[node name="Far" type="Node2D" parent="DecomposedLayers"]
+z_index = -100
+
+[node name="Sprite2D" type="Sprite2D" parent="DecomposedLayers/Far"]
+position = Vector2(0, -20)
+scale = Vector2(0.353591, 0.353591)
+texture_filter = 1
+texture = ExtResource("14_eden_far")
+centered = false
+
+[node name="MidFar" type="Node2D" parent="DecomposedLayers"]
+z_index = -90
+
+[node name="Sprite2D" type="Sprite2D" parent="DecomposedLayers/MidFar"]
+position = Vector2(0, -20)
+scale = Vector2(0.353591, 0.353591)
+texture_filter = 1
+texture = ExtResource("15_eden_mid_far")
+centered = false
+
+[node name="Mid" type="Node2D" parent="DecomposedLayers"]
+z_index = -80
+
+[node name="Sprite2D" type="Sprite2D" parent="DecomposedLayers/Mid"]
+position = Vector2(0, -20)
+scale = Vector2(0.353591, 0.353591)
+texture_filter = 1
+texture = ExtResource("16_eden_mid")
+centered = false
+
+[node name="Playable" type="Node2D" parent="DecomposedLayers"]
+z_index = -70
+
+[node name="Sprite2D" type="Sprite2D" parent="DecomposedLayers/Playable"]
+position = Vector2(0, -20)
+scale = Vector2(0.353591, 0.353591)
+texture_filter = 1
+texture = ExtResource("17_eden_playable")
+centered = false
+
+[node name="Foreground" type="Node2D" parent="DecomposedLayers"]
+z_index = 20
+
+[node name="Sprite2D" type="Sprite2D" parent="DecomposedLayers/Foreground"]
+position = Vector2(0, -20)
+scale = Vector2(0.353591, 0.353591)
+texture_filter = 1
+texture = ExtResource("18_eden_foreground")
+centered = false
+
+[node name="FarBackground" type="Parallax2D" parent="."]
+visible = false
+process_mode = 4
+z_index = -60
+scroll_scale = Vector2(0.15, 1)
+
+[node name="Sky" type="Sprite2D" parent="FarBackground"]
+centered = false
+position = Vector2(0, 0)
+scale = Vector2(0.5, 0.333333)
+texture_filter = 1
+texture = ExtResource("2_sky")
+
+[node name="DistantMountains" type="Sprite2D" parent="FarBackground"]
+centered = false
+position = Vector2(0, 0)
+scale = Vector2(0.5, 0.333333)
+texture_filter = 1
+texture = ExtResource("3_mountains")
+
+[node name="FarMist" type="Parallax2D" parent="."]
+visible = false
+process_mode = 4
+z_index = -40
+scroll_scale = Vector2(0.3, 1)
+
+[node name="PetrifiedCanopy" type="Sprite2D" parent="FarMist"]
+centered = false
+position = Vector2(0, 0)
+scale = Vector2(0.5, 0.333333)
+texture_filter = 1
+texture = ExtResource("4_canopy")
+
+[node name="Mist" type="Sprite2D" parent="FarMist"]
+centered = false
+position = Vector2(0, 0)
+scale = Vector2(0.5, 0.333333)
+texture_filter = 1
+texture = ExtResource("5_mist")
+modulate = Color(1, 1, 1, 0.80)
+
+[node name="DustMotes" type="Sprite2D" parent="FarMist"]
+centered = false
+position = Vector2(0, 0)
+scale = Vector2(0.5, 0.333333)
+texture_filter = 1
+texture = ExtResource("10_dust")
+modulate = Color(1, 1, 1, 0.22)
+
+[node name="Midground" type="Parallax2D" parent="."]
+visible = false
+process_mode = 4
+z_index = -20
+scroll_scale = Vector2(0.55, 1)
+
+[node name="CliffsTerraces" type="Sprite2D" parent="Midground"]
+centered = false
+position = Vector2(0, 0)
+scale = Vector2(0.375, 0.333333)
+texture_filter = 1
+texture = ExtResource("6_cliffs")
+
+[node name="TreeOfKnowledge" type="Sprite2D" parent="Midground"]
+centered = false
+position = Vector2(0, 0)
+scale = Vector2(0.375, 0.333333)
+texture_filter = 1
+texture = ExtResource("7_tree")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="LedgeTerrain" type="Sprite2D" parent="World"]
+visible = false
+centered = false
+position = Vector2(0, 0)
+scale = Vector2(0.5, 0.333333)
+texture_filter = 1
+texture = ExtResource("8_ledge")
+
+[node name="DryRiverBasin" type="Polygon2D" parent="World"]
+visible = false
+z_index = 1
+polygon = PackedVector2Array(390, 174, 438, 168, 491, 171, 544, 166, 604, 171, 657, 167, 714, 173, 690, 187, 630, 192, 565, 189, 501, 194, 443, 188, 404, 183)
+color = Color(0.31, 0.27, 0.20, 1)
+
+[node name="RiverCracks" type="Polygon2D" parent="World"]
+visible = false
+z_index = 2
+polygon = PackedVector2Array(412, 175, 448, 172, 467, 177, 501, 171, 531, 177, 567, 172, 589, 178, 628, 174, 660, 179, 621, 183, 585, 180, 553, 185, 515, 180, 478, 185, 447, 180)
+color = Color(0.53, 0.43, 0.28, 0.9)
+
+[node name="Astronaut" type="CharacterBody2D" parent="World"]
+z_index = 6
+position = Vector2(177, 154)
+script = ExtResource("1_astronaut")
+walk_min_x = 28.0
+walk_max_x = 410.0
+
+[node name="Camera2D" type="Camera2D" parent="World/Astronaut"]
+position = Vector2(96, -46)
+enabled = true
+limit_left = 0
+limit_top = 0
+limit_right = 768
+limit_bottom = 216
+limit_smoothed = true
+position_smoothing_enabled = true
+position_smoothing_speed = 5.0
+drag_horizontal_enabled = true
+drag_left_margin = 0.25
+drag_right_margin = 0.25
+drag_vertical_enabled = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Astronaut"]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_astronaut")
+
+[node name="Sprite2D" type="Sprite2D" parent="World/Astronaut"]
+position = Vector2(0, -10)
+texture_filter = 1
+texture = ExtResource("11_archivist")
+scale = Vector2(0.333, 0.333)
+
+[node name="Foreground" type="Parallax2D" parent="."]
+visible = false
+process_mode = 4
+z_index = 20
+scroll_scale = Vector2(1.15, 1)
+
+[node name="ForegroundVegetation" type="Sprite2D" parent="Foreground"]
+centered = false
+position = Vector2(-36, 0)
+scale = Vector2(0.5, 0.333333)
+texture_filter = 1
+texture = ExtResource("9_fg")
+modulate = Color(1, 1, 1, 0.92)
+
+[node name="FogParticles" type="GPUParticles2D" parent="."]
+visible = false
+emitting = false
+z_index = -5
+position = Vector2(576, 112)
+amount = 36
+lifetime = 16.0
+preprocess = 16.0
+randomness = 0.85
+visibility_rect = Rect2(-576, -108, 1152, 216)
+process_material = SubResource("ParticleProcessMaterial_fog")
+
+[node name="ReconstructionLayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="UI" type="CanvasLayer" parent="."]
+visible = false
+layer = 10
+
+[node name="TopShade" type="ColorRect" parent="UI"]
+offset_right = 384.0
+offset_bottom = 26.0
+mouse_filter = 2
+color = Color(0.02, 0.03, 0.05, 0.68)
+
+[node name="Title" type="Label" parent="UI"]
+offset_left = 10.0
+offset_top = 5.0
+offset_right = 200.0
+offset_bottom = 18.0
+mouse_filter = 2
+text = "EDEN  —  VISUAL SPIKE 01"
+label_settings = SubResource("LabelSettings_ui")
+
+[node name="Hint" type="Label" parent="UI"]
+offset_left = 210.0
+offset_top = 5.0
+offset_right = 374.0
+offset_bottom = 18.0
+mouse_filter = 2
+text = "CLICK / TAP TO WALK"
+horizontal_alignment = 2
+label_settings = SubResource("LabelSettings_ui")
