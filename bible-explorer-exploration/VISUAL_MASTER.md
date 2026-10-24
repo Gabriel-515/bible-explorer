@@ -1,11 +1,14 @@
 # BIBLE EXPLORER — VISUAL & ART DIRECTION MASTER
-> 给 Claude 视觉 chat 用的 handoff · Version 2.0 · Oct 2026
+> 给 Claude 视觉 chat 用的 handoff · Version 2.1 · Oct 2026
 > 每次开新 chat，把这份文件 + MASTER_BRAIN.md 一起丢进去。
 > 这份文件负责：视觉 DNA、美术方向、色彩系统、光线、UI、Godot 场景氛围。
 > 不负责：剧本对话、代码实现、游戏系统设计。
 >
 > v2.0 changes: Added Canon Amendment M04-A — Creation Tablets I–VI visual specifications,
 > Day 2 six-movement restoration constraints, REST UI rules, and placeholder asset rules.
+>
+> v2.1 changes: Clarified visual/narrative authority boundaries, Scripture translation handling,
+> Movement IV concurrency, and the distinction between environmental warm-gold light and semantic Gold accents.
 
 ---
 
@@ -18,10 +21,12 @@
 - 场景氛围和层次构图
 - Godot 场景的视觉实现建议
 - 角色和环境的视觉表达
-- Creation Tablet 最终视觉 canon（M04-A 授权）
+- Creation Tablet 最终视觉 canon（仅限外观、材质、光线、构图与动画；M04-A 授权）
 
 **你不负责：**
 - 剧本和对话写作
+- ARCHIVIST 台词和 scanner 文案内容
+- 经文译本与最终显示措辞
 - 游戏系统逻辑
 - Godot 代码
 
@@ -64,6 +69,13 @@ Gold 代表：某样不能完全归入机器分类的东西。
 
 **第一次出现 Gold 的时机必须被保护。**
 它是整个游戏视觉语言里最有重量的颜色变化。不能被稀释。
+
+## Warm-gold light 与 Semantic Gold（v2.1 已锁定）
+
+- **Warm-gold environmental illumination** 是活着的伊甸园所使用的自然暖光，可以覆盖环境、植被与空气层次。
+- **Semantic Gold accent** 是具有明确叙事意义的视觉标记，只用于 AGAPE、芽、遗物或系统无法分类的内容。
+- 环境暖光不能被处理成 UI 高亮、神迹光效或发光收集物。
+- Semantic Gold 的第一次出现仍必须被保护；环境的暖色照明不构成 Semantic Gold 首次出现。
 
 ---
 
@@ -246,6 +258,8 @@ UTILITY: UNRESOLVED
   极慢色温过渡：更暖的太阳方向，更冷的阴影，淡淡的星月记忆
   这是环境过渡，不是时间流逝小游戏
   绝不出现快进、日夜循环、或可见的"时间经过"效果
+  过渡从运动 4 开始，并继续贯穿运动 5、运动 6 与 4–6 分钟自由漫步
+  运动 5 与运动 6 不得等待这段色温过渡完成
   ↓
 运动 5 — 水中生命与鸟（对应 Tablet V）
   水面出现扰动、折射、隐约水下运动
@@ -281,7 +295,7 @@ UTILITY: UNRESOLVED
 # ═══════════════════════════════════════════
 # M04-A CANON AMENDMENT — CREATION TABLETS
 # Approved by Gabriel · 23 Oct 2026
-# Claude Visual Master owns this section
+# Claude Visual Master owns the visual specifications in this section
 # ═══════════════════════════════════════════
 
 ## Creation Tablet 视觉总原则
@@ -291,6 +305,7 @@ UTILITY: UNRESOLVED
 
 **关于 tablet 视觉资产的所有权规则（已锁定）：**
 - Claude Visual Master 拥有所有六块 tablet 的最终视觉 canon
+- Storyline Master 拥有 ARCHIVIST 台词、scanner 文案内容、经文片段语义与叙事节拍
 - Codex（实现聊天）只能使用中性占位符锚点
 - 所有临时节点 / 占位符资产必须清晰标记为 `[PLACEHOLDER — VISUAL REVIEW REQUIRED]`
 - Codex 不得生成、绘制或宣布最终 tablet 视觉
@@ -309,9 +324,17 @@ UTILITY: UNRESOLVED
 
 **Tablet 不发光。它们不是神奇的发光石板。它们是古老的档案材料。**
 
+## 叙事文字与经文译本边界（v2.1 已锁定）
+
+- 本文件中的 `Fragment`、`ARCHIVIST reaction` 与 scanner 文本只用于表达视觉所需的长度、密度与节奏，不由 Visual Master 最终锁定。
+- 最终 ARCHIVIST 台词与 scanner wording 必须由 Storyline Master 批准。
+- 锁定的是经文范围与 fragment 的**语义锚点**，不是某一个英文译本的固定句子。
+- 实际显示文字必须跟随玩家选择或产品指定的 Bible translation。
+- Tablet VI 的锁定语义是 Genesis 1:31 的“very good／甚好”；最终措辞仍跟随所采用的译本。
+
 ## Tablet 扫描仪 UI 通则
 
-所有六块 tablet 的扫描 UI 遵循标准扫描仪语言（Cyan 系，monospace）：
+所有六块 tablet 的扫描 UI 遵循标准扫描仪视觉语言（Cyan 系，monospace）。下列文字是版式与信息密度参考；最终 wording 属于 Storyline Master：
 
 ```
 [MATERIAL ANALYSIS]
@@ -336,8 +359,8 @@ FULL RANGE QUEUED FOR ARCHIVE RECONSTRUCTION
 ## Creation Tablet I — 光与黑暗
 
 **Scripture range:** Genesis 1:1–5
-**Fragment:** "Let there be light."
-**ARCHIVIST reaction:** "The burn pattern has no heat source."
+**Fragment semantic anchor:** Genesis 1:3 — light called into being（最终措辞跟随采用的译本）
+**Narrative reference — Storyline Master authority:** "The burn pattern has no heat source."
 
 ### 物理外观（视觉 canon）
 - 石板沿对角线断裂
@@ -370,8 +393,8 @@ FULL RANGE QUEUED FOR ARCHIVE RECONSTRUCTION
 ## Creation Tablet II — 天空与水
 
 **Scripture range:** Genesis 1:6–8
-**Fragment:** "waters above … waters below."
-**ARCHIVIST reaction:** "This basin records water in two directions."
+**Fragment semantic anchor:** Genesis 1:6–7 — waters separated above and below（最终措辞跟随采用的译本）
+**Narrative reference — Storyline Master authority:** "This basin records water in two directions."
 
 ### 物理外观（视觉 canon）
 - 水侵蚀，部分淹没在矿物淤泥中
@@ -402,8 +425,8 @@ ATMOSPHERIC MODEL: INCOMPLETE
 ## Creation Tablet III — 土地与植被
 
 **Scripture range:** Genesis 1:9–13
-**Fragment:** "Let the earth bring forth."
-**ARCHIVIST reaction:** "The soil is capable. Nothing is using it."
+**Fragment semantic anchor:** Genesis 1:11 — the earth bringing forth vegetation（最终措辞跟随采用的译本）
+**Narrative reference — Storyline Master authority:** "The soil is capable. Nothing is using it."
 
 ### 物理外观（视觉 canon）
 - 大部分被埋，被枯死的根系抬起
@@ -435,8 +458,8 @@ SEQUENCE MARKER: III
 ## Creation Tablet IV — 日、月与星
 
 **Scripture range:** Genesis 1:14–19
-**Fragment:** "for signs and seasons."
-**ARCHIVIST reaction:** "It was built to measure a sky that no longer moves."
+**Fragment semantic anchor:** Genesis 1:14 — signs and seasons（最终措辞跟随采用的译本）
+**Narrative reference — Storyline Master authority:** "It was built to measure a sky that no longer moves."
 
 ### 物理外观（视觉 canon）
 - 表面是**磨光**的，而不是深雕刻
@@ -463,6 +486,7 @@ SEQUENCE MARKER: IV
 - 阴影轻微冷却
 - 淡淡的星月记忆出现在天空（不是完整的星空，是残留的记忆）
 - 整个过渡必须极慢——跨越完整的 4–6 分钟自由漫步期
+- 过渡开始后与运动 5、运动 6 并行推进，不构成后续恢复运动的阻塞条件
 - 绝对不能有：快进时钟、快速日夜切换、明显的"时间流逝"
 - 如果玩家不刻意观察天空，他们可能察觉不到——这是对的
 
@@ -471,8 +495,8 @@ SEQUENCE MARKER: IV
 ## Creation Tablet V — 水中与天空的生命
 
 **Scripture range:** Genesis 1:20–23
-**Fragment:** "let the waters teem … let birds fly."
-**ARCHIVIST reaction:** "Two habitats. The same absence."
+**Fragment semantic anchor:** Genesis 1:20 — waters teeming with life and birds flying（最终措辞跟随采用的译本）
+**Narrative reference — Storyline Master authority:** "Two habitats. The same absence."
 
 ### 物理外观（视觉 canon）
 - 下半部分：水侵蚀磨圆
@@ -507,8 +531,8 @@ SEQUENCE MARKER: V
 ## Creation Tablet VI — 动物与人类
 
 **Scripture range:** Genesis 1:24–31
-**Fragment:** "It was very good." ← 已锁定（Gabriel 23 Oct 2026 确认）
-**ARCHIVIST reaction:** "The animal forms survived. The human record did not."
+**Fragment semantic anchor:** Genesis 1:31 — “very good／甚好”（Gabriel 23 Oct 2026 确认；最终措辞跟随采用的译本）
+**Narrative reference — Storyline Master authority:** "The animal forms survived. The human record did not."
 
 ### 物理外观（视觉 canon）
 - 比其他五块**损坏更严重**——这是刻意的
@@ -743,5 +767,5 @@ VIABILITY AT RECOVERY: 0.03%
 *这份文件是视觉 canon。*
 *当你不确定一个视觉方向是否正确——用五条过滤问题检验。*
 *当你想改变任何已锁定的视觉元素——先问创作者。*
-*M04-A 的六块 Creation Tablets 视觉 canon 由 Claude Visual Master 拥有。Codex 使用占位符，不声明最终视觉。*
+*M04-A 的六块 Creation Tablets 视觉 canon 由 Claude Visual Master 拥有；此权限只涵盖外观、材质、光线、构图与动画。对白、scanner wording、经文译本与叙事节拍由 Storyline Master 管理。Codex 使用占位符，不声明最终视觉。*
 *所有视觉决定必须服务于同一个脊梁：神在人类千百次选择离开之后，仍然选择留下。那就是 AGAPE。*

@@ -270,172 +270,327 @@ ARCHIVIST: **"That's… not zero."**
 
 ---
 
-# CHAPTER 1 — 伊甸园（已锁定）
+# CHAPTER 1 — 伊甸园（M04 已锁定）
 
-**标题：** THE GARDEN THAT REMEMBERS
-**书卷：** 创世纪 1–3
+**标题：** THE GARDEN THAT REMEMBERS  
+**书卷：** 创世纪 1–3  
 **情感弧线：** 惊奇 → 探索 → 好奇 → 天堂 → 人类出现 → 不安 → 失去 → 沉思 → 谜
 
-**这个 scene 里 AGAPE 的体现：**
-即使人类违逆，生命没有被完全抹去。种子 0.03% 的存活率是神的爱留下的最后线索。
+**M04 Narrative status:** APPROVED WITH AMENDMENTS
+
+## M04 叙事核心
+
+六块 Creation Tablets 是 Eden 记忆的隐藏语法。
+
+它们不是 collectible，不是六个任务，不是六次强制读经。
+
+Genesis 的三个问题层：
+
+- Genesis 1 fragments：**这里如何被创造？**
+- Genesis 2：**这里原本是什么？**
+- Genesis 3：**这里发生了什么？**
+
+五个旧环境线索继续存在，但被整合为 Tablets I–V 周围的 **environmental evidence regions**。环境证据与 tablet correlation 共同形成 discovery beat，而不是额外制造扫描清单。
+
+## Authority boundary
+
+**Storyline Master owns：**
+- ARCHIVIST dialogue
+- scanner wording
+- Scripture fragment semantic anchor
+- narrative beat / pacing
+
+**Visual Master owns：**
+- tablet physical appearance
+- material / erosion / fracture
+- lighting / composition
+- visual animation / transition language
+
+Codex 只能使用 neutral placeholders，不能宣布最终 tablet visual。
+
+## Tablet Scripture ranges
+
+| Tablet | Range | Narrative function |
+|---|---|---|
+| I | Genesis 1:1–5 | Light / separation |
+| II | Genesis 1:6–8 | Sky / waters |
+| III | Genesis 1:9–13 | Land / vegetation |
+| IV | Genesis 1:14–19 | Celestial rhythm |
+| V | Genesis 1:20–23 | Aquatic life / birds |
+| VI | Genesis 1:24–31 | Animals / humankind |
+
+Fragments 锁定的是语义，不锁死英文译本；最终显示跟随采用的 Bible translation。
+
+Scanner 禁止：
+- tablet collected
+- 1/6、2/6
+- percentage completion
+- Creation Day complete
+- theology explanation
+- quiz
+- reward / score
 
 ---
 
-## DAY 1 — 问题
+## EXPEDITION DAY 1 — 问题
 
-### 五个环境线索（Day 1 死 → Day 2 活，最重要的情感时刻）
-1. 不明石质结构
-2. 石化的花
-3. 古老的干涸水渠
-4. 植被残骸（根部/种子残留）
-5. 鸟类化石 / 废弃鸟巢
+### Beat 1 — Arrival
+Ruined Eden。先让玩家感受世界，不把 Tablet 放在脸上。
 
-### 数据矛盾
+### Beat 2 — First anomaly
 ```
 SOIL AGE: INCONSISTENT
 ORGANIC RESIDUE: OUTSIDE EXPECTED RANGE
 CLIMATE MODEL: INCOMPATIBLE
 ```
-没有任何读数说"神迹"。ARCHIVIST 说"数据矛盾"。
 
-### 安静的避风港
-在到达树之前，安排至少一个平静地点。**目的：不是任务，只是呼吸。**
+### Beat 3 — Tablet I / Light
+第一块 damaged archival object。
 
-### 第一个异常
-```
-CELLULAR STRUCTURE: UNRESOLVED
-DEVICE STATUS: NOMINAL
-```
-**第一次：机器正常工作，但解释失败。**
+ARCHIVIST：
+> "The burn pattern has no heat source."
 
-### 树的揭示
-```
-UNKNOWN ARBOREAL STRUCTURE
-```
-树必须感觉：美丽、古老、神圣、神秘、宏伟。**不是邪恶，不是 boss。**
+### Beat 4 — Evidence Region II / Water + Tablet II
+干涸水渠与 tablet correlation 形成一个 beat。
 
-### 第一次树扫描 → 圣经触发
+ARCHIVIST：
+> "Water."
+
+Beat.
+
+> "Not recently."
+
+### Beat 5 — Evidence Region III / Plant life + Tablet III
+石化花、植被残骸、土壤异常与 Tablet III 聚合。
+
+ARCHIVIST：
+> "That's two matches."
+
+Beat.
+
+> "Possible matches."
+
+### Beat 6 — Quiet refuge + Tablet IV
+这是既有 quiet refuge 的一部分，不改成 astronomy puzzle。
+
+Tablet IV 必须**可靠被发现**：
+- 主路径 proximity 自动产生轻度 scanner detection
+- 玩家可选择靠近查看完整分析
+- 无 checklist
+
+ARCHIVIST：
+> "A calendar?"
+
+Beat.
+
+> "Maybe."
+
+### Beat 7 — Evidence Region V / Empty habitat + Tablet V
+空巢 / 鸟类化石与更广水域 evidence。
+
+ARCHIVIST：
+> "Nothing here now."
+
+### Beat 8 — Tablet VI / Human record interruption
+最后一块 tablet 的 human-related record 严重残缺。
+
+Scanner narrative termination：
+
+```
+HUMAN—
+DATA LOSS
+```
+
+ARCHIVIST 等待。
+
+> "The record ends there."
+
+### Beat 9 — Tree reveal
+Tree of Knowledge 成为场景主导。
+
 ```
 ARCHIVAL CROSS-REFERENCE DETECTED
 SOURCE FAMILY: GENESIS
+SOURCE CONTEXT REQUIRED
 ```
-目标：**SOURCE CONTEXT REQUIRED → 返回飞船**
 
-### 飞船夜晚 — 创世纪 2
-问题：**"这个地方本来应该是什么样子？"**
-阅读后：`HYDROLOGICAL PATTERN MATCH / BOTANICAL RECORD MATCH`
-**不要说"创世纪被证明了"。**
+### Beat 10 — Return to ship
+暖光、安全、与 Eden 形成强烈对比。
 
-### 灵修 01（暂定）
-> 当一个地方失去了原本的样子，我们还能从留下来的痕迹中看见什么？
-选项：思考 / 写日志 / 继续。**没有评分。**
+### Beat 11 — SCRIPTURE MOMENT 1
+Genesis 2。
 
-### 休息
+问题：
+
+> "What was this place supposed to be?"
+
+这是 major Scripture moment 之一。
+
+### Beat 12 — Reflection / journal
+可选，无评分。
+
+### Beat 13 — REST
+Genesis 2:1–3 的意义通过行动形成平行。
+
+按钮只写：
+
 ```
-REST UNTIL LOCAL MORNING? → REST → 渐暗 → Day 2 立即开始
+REST
 ```
+
+没有 Tablet VII。  
+没有 Seventh Day badge。  
+ARCHIVIST 不解释 Sabbath。
 
 ---
 
-## DAY 2 — 记忆
+# EXPEDITION DAY 2 — 记忆
 
-### 第二次树扫描 → 重建
+### Beat 14 — Return
+相同废墟。
+
+### Beat 15 — Tree scan
 ```
 RECONSTRUCTION CONFIDENCE: SUFFICIENT
 ```
 
-### 重建顺序（渐进，绝对不能瞬间切换）
-```
-声音 → 水 → 草 → 花 → 植被 → 鸟 → 动物 → 树冠展开 → 完整伊甸园
-```
+### Beat 16 — Movement I / LIGHT
+声音先打破静默，光分开可通行空间与黑暗。
 
-### 五个线索必须复活
-- 石化的花 → 盛开
-- 水渠 → 流水
-- 枯植被 → 茂盛
-- 空巢/化石 → 活鸟归来
-- 石质结构 → 揭示原来功能
+### Beat 17 — Movement II / SKY + WATERS
+雾霾打开天空层；水渠重新流动。
 
-### 活着的伊甸园（不可妥协）
-目标：**4–6 分钟**的可选探索。
-感觉：**宏伟 / 仙境 / 鸟语花香**
-某些互动**没有奖励**——这是刻意的。
+### Beat 18 — Movement III / LAND + VEGETATION
+地面 → 草 → 花 → 更大植被。
 
-### 亚当 & 夏娃
-```
-HUMANOID SIGNATURES: 2 / IDENTITY: UNKNOWN
-```
-遥远、沉默、半透明、原型式。**不要说教性的 NPC 对话。**
+既有 environmental evidence regions 开始产生 alive counterpart。
 
-### 不安 → 蛇 → 选择
-```
-RECONSTRUCTION CONFIDENCE: 58% → 43%
-BIOLOGICAL CLASSIFICATION: INCOMPLETE（蛇）
-DATA INTEGRITY: DECLINING → 沉默
-```
+### Beat 19 — Movement IV / CELESTIAL RHYTHM
+极慢环境色温 / 光向 / 阴影节律变化开始。
 
-### 腐败
-```
-ARCHIVE INTEGRITY FAILURE → SOURCE DATA CORRUPTED → RECONSTRUCTION TERMINATED
-```
-不是爆炸，不是恐怖。是系统崩溃的样子。
+**Concurrency rule：**
+Movement IV 一旦开始便持续运行。
+Movement V 与 VI 不等待它完成。
+它继续贯穿后续恢复与 4–6 分钟 free-walk。
 
-### 失乐园
-一切消失。玩家回到废墟。**但现在玩家记得它曾经是什么样的。**
+### Beat 20 — Movement V / AQUATIC LIFE + BIRDS
+声音先于视觉。
 
-### 沉默 → 古老种子
+- 水面扰动 / 折射暗示水中生命
+- 不要求 fish model
+- 鸟鸣 → 鸟轮廓 → 鸟进入树冠
+
+### Beat 21 — Movement VI / ANIMALS + HUMANKIND
+动物进入。
+
+随后：
 ```
-RELIC 01 / ANCIENT SEED / VIABILITY: 0.03%
+HUMANOID SIGNATURES: 2
+IDENTITY: UNKNOWN
 ```
 
-### 传输信标幽默
-敲 → 没反应 → 敲 → 没反应 → 小力拍 → `ONLINE`
+Adam & Eve：
+- distant
+- silent
+- translucent
+- archetypal
+- non-interactive
 
-### 假结局
-传输完成，任务完成，玩家开始离开。扫描仪：**一声提示音。**
+### Beat 22 — Living Eden free-walk
+**4–6 minutes available — non-negotiable.**
 
-### 芽（最重要的最后时刻）
+没有 tablet objective。
+玩家被允许只是存在于 garden。
+
+### Beat 23 — Unease
+鸟鸣减弱、光线变化、蛇 classification incomplete。
+
+### Beat 24 — Corruption
+```
+ARCHIVE INTEGRITY FAILURE
+SOURCE DATA CORRUPTED
+RECONSTRUCTION TERMINATED
+```
+
+不是爆炸，不是 horror。
+
+### Beat 25 — Loss
+回到废墟。
+环境证据与 tablets 仍在，但玩家现在记得它们的 counterpart。
+
+### Beat 26 — Silence
+不扫描，不读经，让 loss 存在。
+
+### Beat 27 — Ancient seed
+```
+RELIC 01
+ANCIENT SEED
+VIABILITY: 0.03%
+```
+
+### Beat 28 — Transmission
+Beacon：敲 → 敲 → 小力拍 → ONLINE。
+
+### Beat 29 — False ending
+玩家开始离开。
+
+### Beat 30 — Real sprout
 ```
 ORGANIC STATUS: VIABLE
 CELLULAR ACTIVITY: ACTIVE
 SOURCE: UNKNOWN
 ```
-ARCHIVIST: **"…That's not a reconstruction."**
 
-**芽的规则：不说神被证实。谜保留。**
+ARCHIVIST：
 
----
-
-## 飞船尾声
-圣经阅读器打开：**创世纪 3**
-问题：**"这里发生了什么？"**（在经历之后，不是之前）
-
-### 灵修 02（暂定）
-> 当我们失去以后，为什么才开始看见原本拥有的价值？
-
-### 遗物档案 — 第一次
-```
-RELIC 01 / ANCIENT SEED / ORIGIN: EDEN / VIABILITY AT RECOVERY: 0.03%
-```
+> "…That's not a reconstruction."
 
 ---
 
-## Chapter 1 完整流程
+# EPILOGUE
 
-### DAY 1
-降落 → 废墟 → 五个线索 → 安静避风港 → 第一个异常 → 树揭示 → 第一次树扫描 → 返回飞船 → 创世纪 2 → 灵修 → 日志 → 休息
+### Beat 31 — Return to ship
+安静处理，不做胜利庆典。
 
-### DAY 2
-返回 → 第二次树扫描 → 渐进重建 → 五个线索复活 → 活着的伊甸园 → 亚当夏娃 → 蛇 → 选择 → 腐败 → 失乐园 → 沉默 → 古老种子 → 传输信标 → 传输 → 芽 → "…That's not a reconstruction."
+### Beat 32 — SCRIPTURE MOMENT 2
+Genesis 3。
 
-### 尾声
-飞船 → 创世纪 3 → 沉思 → 日志 → 种子进遗物档案 → 章节完成
+问题：
 
-### 两个圣经时刻（不超过两个）
-- **创世纪 2**，飞船 Day 1：*"这个地方本来是什么样子？"*
-- **创世纪 3**，飞船 Day 2 事后：*"这里发生了什么？"*
+> "What happened here?"
+
+### Beat 33 — Reflection / relic archive
+Ancient Seed 进入遗物档案。
+Chapter complete。
 
 ---
+
+# M04-VS1 — IMPLEMENTATION GATE
+
+在最终 Eden traversal map 被批准之前，完整六 tablet placement **不得开始**。
+
+授权的下一个技术 milestone：
+
+**M04-VS1 — One-Tablet Interaction Vertical Slice**
+
+只验证：
+- neutral placeholder anchor
+- proximity / interaction detection
+- scanner UI/readout
+- Genesis range + sequence metadata
+- translation-neutral semantic fragment model
+- persistence / re-entry
+- return-to-ship compatibility
+- no counters / percentages / reward
+
+不得：
+- 布置六块最终 tablet
+- 创建最终 tablet art
+- 改变 walk bounds
+- 改 Phase 3 parallax
+- 修改 `astronaut.gd`
+- 锁 final traversal map
+- 创建 Tablet VII
 
 # Genesis Arc — 未来 Scene 地图
 

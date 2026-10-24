@@ -269,7 +269,11 @@ Gold / 有机色调 → 生命。希望。系统无法归类的东西。
 ## 十六、Scene 地图 — Genesis Arc
 
 平台：手机优先，PC 兼容。
-范围：完整创世纪。先发布看支持度，再决定是否继续。
+范围目标：完整创世纪。先发布看支持度，再决定是否继续。
+
+> **OPEN SCOPE DECISION — 不阻塞 M04：**
+> 当前 Scene 地图仍包含属于 Exodus 的“旷野漂流”，同时尚未完整列出 Abraham / Isaac / Jacob / Joseph。
+> 因此“Genesis Arc”的最终边界尚未锁定。M04 期间不得借此扩写 Chapter 2 或重构后续 Arc；后续必须单独决定是完成完整 Genesis，还是把“旷野漂流”移入后续 Exodus Arc。
 
 每个 scene 必须回答三个核心问题：
 1. 这个世界的人类困境是什么？
@@ -351,7 +355,7 @@ AGAPE 这个词——他从询问定义开始，到 Genesis 结尾，他开始�
 
 ---
 
-## 二十、Chapter 1 结构（已锁定）
+## 二十、Chapter 1 结构（M04 已锁定）
 
 Scene：伊甸园 | 书卷：创世纪 1–3 | 标题："那座记得的花园"
 
@@ -362,34 +366,168 @@ Scene：伊甸园 | 书卷：创世纪 1–3 | 标题："那座记得的花园"
 神造的一切，没有因为人的选择而被完全抹去。
 种子 0.03% 的存活率，是神的爱留下的最后一个线索。
 
-DAY 1 — 问题
-- 降落 → 死去的伊甸园 → 5 个环境线索 → 到达树 → 扫描仪触发档案封锁
-- ARCHIVAL SOURCE CORRELATION: GENESIS
-- 返回飞船 → 氛围完全改变，温暖
-- 在圣经阅读终端读创世纪 2（选段）
-- 可选短灵修 / 日志
-- 休息键 → 屏幕慢慢变暗
+### M04 — Creation Tablets（已批准）
 
-DAY 2 — 记忆
-- 回到树 → 主扫描解锁，创世纪 2 参数已载入
-- 重建慢慢展开（声音 → 水 → 草 → 花 → 鸟 → 完整伊甸园）
-- 所有 5 个死亡线索复活，有生命的对应物
-- 玩家在活着的伊甸园里自由行走 4–6 分钟（不可妥协）
-- 亚当夏娃在远处出现——半透明，沉默，原型式
-- 环境改变——鸟鸣减弱，临床感的光，蛇的形状
-- 腐败序列——数据撕裂，档案崩溃，不是恐怖片
-- 伊甸园消失——沉默，失去是真实的
-- 发现古老种子（0.03% 存活率）→ 传输信标 → 敲敲拍 → 亮绿灯
-- 玩家转身离开
-- 真实的芽出现——没有扫描线，不会闪烁
-- ORGANIC STATUS: VIABLE / SOURCE: UNKNOWN
-- ARCHIVIST："……这不是重建。"
-- 返回飞船 → 读创世纪 3 → 沉思
-- 章节片尾卡
+Genesis 1 通过六块 **Creation Tablets I–VI** 成为 Chapter 1 的档案层与隐藏结构：
 
-两个圣经时刻（Chapter 1 不超过两个）：
-- 创世纪 2，飞船（Day 1）："这里本来是什么样子？"
-- 创世纪 3，飞船（Day 2 事后）："这里发生了什么？"
+1. Tablet I — Genesis 1:1–5 — 光与黑暗
+2. Tablet II — Genesis 1:6–8 — 天空与水
+3. Tablet III — Genesis 1:9–13 — 土地与植被
+4. Tablet IV — Genesis 1:14–19 — 日、月与星 / 天体节律
+5. Tablet V — Genesis 1:20–23 — 水中生命与鸟
+6. Tablet VI — Genesis 1:24–31 — 动物与人类
+
+**Tablet 不是 collectible。**
+- 不进入背包
+- 不显示 1/6、百分比、完成评分或奖励
+- 不制造六次长篇 Bible reading
+- 不要求六次停顿式恢复
+- Day 1 是损坏的古代档案证据；Day 2 counterpart 是环境中的创造运动，不是“修复后的石板”
+
+### 五个环境线索的 M04 重构
+
+五个既有环境线索继续作为真实物理证据存在，但**不再默认各自成为独立扫描任务**。
+
+它们被编排进 Tablets I–V 周围的五个环境证据区域：
+
+- 水渠 / 水文证据 → Tablet II
+- 石化花与植被残骸 → Tablet III
+- 空巢 / 鸟类化石 → Tablet V
+- 不明石质结构 → 整合进 tablet / evidence-region 构图
+- 其他既有物理异常继续保留为环境证据
+
+核心规则：
+
+> 环境提供物理证据。  
+> Tablet 提供档案关联。  
+> 两者共同构成一个 discovery beat。
+
+Chapter 1 不应变成“五个线索 + 六块石板 = 十一个任务点”。
+
+### Scripture 层级
+
+Chapter 1 仍然只有两个 major Scripture-reading moments：
+
+- Genesis 2，飞船 / Expedition Day 1 结束："这里本来是什么样子？"
+- Genesis 3，飞船 / Expedition Day 2 事后："这里发生了什么？"
+
+Genesis 1 tablets 属于 **archival Scripture layer**：
+- scanner 可显示物质分析、Genesis correlation、verse range、sequence marker
+- fragment 锁定的是语义锚点，不锁死某个英文译本
+- 实际显示经文跟随玩家选择或产品指定的 Bible translation
+- exploration 中不强迫进入完整 Bible-reading screen
+
+### Expedition Day 1 — 问题
+
+降落
+→ 死去的伊甸园
+→ integrated evidence regions + Creation Tablets I–VI
+→ Tablet IV 至少通过主路径 passive scanner detection 被可靠记录；玩家可选择靠近查看更完整分析
+→ 安静避风港
+→ 树的揭示
+→ 第一次树扫描
+→ ARCHIVAL SOURCE CORRELATION: GENESIS
+→ 返回飞船
+→ Genesis 2（包含 Genesis 2:1–3 的上下文）
+→ 可选灵修 / 日志
+→ 玩家主动选择 **REST**
+→ 屏幕缓慢变暗
+
+**没有 Tablet VII。**
+安息通过玩家的 REST 行动被体验，而不是成为第七个 collectible。
+ARCHIVIST 此阶段不会把 REST 解释成 Sabbath。
+
+### Expedition Day 2 — 记忆
+
+返回树
+→ 主扫描解锁
+→ 六个创造运动连续展开：
+
+1. **LIGHT** — 光与分离
+2. **SKY / WATERS** — 天空与水
+3. **LAND / VEGETATION** — 土地、草、花与植被
+4. **CELESTIAL RHYTHM** — 极慢天体色温与节律变化
+5. **AQUATIC LIFE / BIRDS** — 水中生命暗示与鸟
+6. **ANIMALS / HUMANKIND** — 动物与远处两个人形档案投影
+
+Movement IV 的 celestial transition：
+- 从 Movement IV 开始
+- 与 Movement V、Movement VI 并行
+- 继续贯穿 4–6 分钟 free-walk
+- V–VI 不得等待它完成
+
+随后：
+→ 树冠完全展开
+→ 完整活着的 Eden
+→ 4–6 分钟自由行走（不可妥协）
+→ 亚当和夏娃：遥远、沉默、半透明、不可互动、原型式
+→ 环境不安
+→ 蛇 / classification incomplete
+→ archive corruption
+→ Eden 消失
+→ 沉默
+→ 古老种子（VIABILITY: 0.03%）
+→ 传输信标
+→ 假结局
+→ 真实芽出现
+
+最终 scanner：
+
+```
+ORGANIC STATUS: VIABLE
+CELLULAR ACTIVITY: ACTIVE
+SOURCE: UNKNOWN
+```
+
+ARCHIVIST：
+> "…That's not a reconstruction."
+
+返回飞船
+→ Genesis 3
+→ 沉思 / 日志
+→ 种子进入遗物档案
+→ Chapter 1 完成
+
+### ARCHIVIST / scanner authority
+
+- Storyline Master 锁定 ARCHIVIST 台词、scanner wording、经文 fragment 语义与叙事节拍
+- Visual Master 锁定 tablet 外观、材质、损坏、光线、构图与动画
+- Codex 不得从 Visual Master 自行推导最终对白
+
+M04 当前首选 reference lines：
+- Tablet I: "The burn pattern has no heat source."
+- Tablet II: "Water." / "Not recently."
+- Tablet III: "That's two matches." / "Possible matches."
+- Tablet IV: "A calendar?" / "Maybe."
+- Tablet V: "Nothing here now."
+- Tablet VI: scanner 终止于 `HUMAN— / DATA LOSS`；ARCHIVIST 等待后："The record ends there."
+
+### M04 implementation gate
+
+当前 Eden Spike 不是最终六块 tablet traversal map。
+
+在最终空间布局批准之前：
+
+**只授权 M04-VS1 — One-Tablet Interaction Vertical Slice。**
+
+VS1 只验证：
+- neutral placeholder tablet anchor
+- proximity / interaction detection
+- scanner response
+- Genesis metadata presentation
+- translation-neutral semantic fragment handling
+- state persistence / re-entry
+- no counter / percentage / reward
+- 与现有 Eden flow 兼容
+
+VS1 不得：
+- 布置完整六块 tablet
+- 扩大 walk bounds
+- 改写 Phase 3 parallax
+- 修改 `astronaut.gd`
+- 生成最终 tablet art
+- 实现 Tablet VII
+- 锁定最终 Eden traversal map
 
 ---
 
