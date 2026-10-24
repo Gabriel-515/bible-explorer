@@ -69,6 +69,7 @@ func _build_scanner_ui() -> void:
 	var root := Control.new()
 	root.name = "ScannerUI"
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	canvas.add_child(root)
 
 	proximity_label = Label.new()
@@ -125,7 +126,8 @@ SEQUENCE MARKER: I
 FRAGMENT SEMANTIC: LIGHT CALLED INTO BEING
 ARCHIVE RECONSTRUCTION: QUEUED
 
-ARCHIVIST: "The burn pattern has no heat source.""""
+ARCHIVIST: "The burn pattern has no heat source."
+"""
 	scanner_panel.visible = true
 	scanner_timer.start()
 
@@ -141,6 +143,6 @@ func _set_prompt_visible(visible_now: bool) -> void:
 
 func _refresh_interaction_label() -> void:
 	var state = get_node_or_null("/root/M04VS1State")
-	var already_recorded := state != null and state.has_record(TABLET_ID)
+	var already_recorded: bool = state != null and state.has_record(TABLET_ID)
 	if scan_button != null:
 		scan_button.text = "REVIEW" if already_recorded else "SCAN"
