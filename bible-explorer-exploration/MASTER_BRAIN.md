@@ -209,6 +209,34 @@ ARCHIVIST-07 在慢慢把圣经还给人类的档案。
 
 ---
 
+## 十一点五、移动体验方向（未来 locomotion milestone）
+
+当前 click/tap-to-walk 不是永久锁定的最终移动方式。
+
+未来可评估切换为更有代入感的 **invisible analog movement / guided free-walk**：
+- 手机：无明显摇杆外观的 touch / drag analog control
+- PC / controller：keyboard / stick 可映射到同一 movement intent
+- 移动以自然 walk 为主，不鼓励高速 sprint 破坏安静探索节奏
+- 可加入轻度 acceleration / deceleration、left/right facing、idle / walk 状态
+- 环境反馈可包括：废墟脚边尘土、活着 Eden 的草叶扰动、不同地面的脚步声、靠近重要物件时的轻微 head-turn / contextual slowdown
+- run 不是当前必要功能，可后续单独评估
+
+**核心架构规则（从现在开始保护）：**
+
+> Story / interaction logic must depend on player position and game state, not on the specific movement input method.
+
+也就是说：
+- proximity / trigger / scanner / narrative state 不应依赖“mouse click destination”本身
+- movement input 未来可以从 click/tap 改成 analog / joystick / controller，而不重写 Chapter 1 叙事系统
+- 角色动画、脚步、尘土、草叶反应属于 locomotion presentation layer，不应和 story progression 耦合
+
+**当前状态：**
+- 这是未来方向，不是当前 M04-VS1 实施内容
+- 不授权现在修改 `astronaut.gd`、walk bounds 或 Phase 3 parallax
+- 应在 Chapter 1 interaction architecture 稳定后，作为独立 bounded milestone 评估和实现
+
+---
+
 ## 十二、飞船 — 产品的心脏
 
 它必须感觉像：下班后回到家。暖光。安静。安全。

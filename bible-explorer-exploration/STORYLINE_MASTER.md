@@ -270,6 +270,40 @@ ARCHIVIST: **"That's… not zero."**
 
 ---
 
+# PLAYER MOVEMENT / IMMERSION — FUTURE DIRECTION
+
+当前 Chapter 1 叙事不锁死 click-to-move。
+
+未来优先评估的 movement direction：
+
+> **Invisible analog movement + contextual character/environment response**
+
+目标不是把 Bible Explorer 变成 action game，而是让玩家更像“亲自走进 Eden”。
+
+可能包含：
+- natural acceleration / deceleration
+- idle / walk / facing states
+- optional faster walk；run 非必要
+- ruin dust footsteps
+- living-Eden grass displacement
+- surface-specific footsteps
+- subtle head-turn toward important discoveries
+- contextual slowdown / camera framing near major reveals
+
+叙事层必须保持 input-agnostic：
+
+> Story beats react to **player position + world state**, not to the specific control method used to reach that position.
+
+因此：
+- Tablet detection 继续以 proximity / state 为核心
+- scanner / persistence / story progression 不应依赖 mouse click 事件
+- 未来从 click/tap 改成 analog / virtual joystick / controller 时，不应要求重写 Chapter 1 storyline
+- movement animation 与环境脚步效果属于 presentation / locomotion system，不属于 narrative gate
+
+**Implementation status:** PARKED / NOT AUTHORIZED DURING M04-VS1.
+
+---
+
 # CHAPTER 1 — 伊甸园（M04 已锁定）
 
 **标题：** THE GARDEN THAT REMEMBERS  
