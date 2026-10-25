@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" path="res://assets/backgrounds/eden_layers/eden_playable.png" id="17_eden_playable"]
 [ext_resource type="Texture2D" path="res://assets/backgrounds/eden_layers/eden_foreground.png" id="18_eden_foreground"]
 [ext_resource type="Script" path="res://scripts/m04_vs1_tablet.gd" id="19_m04_vs1_tablet"]
+[ext_resource type="Script" path="res://scripts/archivist_animation.gd" id="20_archivist_animation"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_astronaut"]
 size = Vector2(8, 18)
@@ -224,7 +225,7 @@ shape = SubResource("RectangleShape2D_m04_vs1_tablet")
 
 [node name="Astronaut" type="CharacterBody2D" parent="World"]
 z_index = 6
-position = Vector2(177, 154)
+position = Vector2(177, 167)
 script = ExtResource("1_astronaut")
 walk_min_x = 28.0
 walk_max_x = 410.0
@@ -253,6 +254,9 @@ position = Vector2(0, -10)
 texture_filter = 1
 texture = ExtResource("11_archivist")
 scale = Vector2(0.333, 0.333)
+
+[node name="ArchivistAnimation" type="Node2D" parent="World/Astronaut"]
+script = ExtResource("20_archivist_animation")
 
 [node name="Foreground" type="Parallax2D" parent="."]
 visible = false
