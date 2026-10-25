@@ -237,6 +237,22 @@ ARCHIVIST-07 在慢慢把圣经还给人类的档案。
 
 ---
 
+## 十一点六、2D 世界与角色动画参考（REFERENCE ONLY）
+
+**已决定：Bible Explorer 保持 2D cinematic side-scrolling exploration。**
+
+- Godot 继续作为游戏引擎，保留现有 2D layered-parallax / camera 结构。
+- *Little Astronaut*（Veloneer Games）只作为 **world atmosphere 与 animation feel 的参考**，不是 3D 迁移目标，也不是 gameplay blueprint。
+- 可借鉴：小型宇航员与宏大废墟的尺度对比、环境纵深与雾光、安静探索的空间感。
+- 可研究的角色表现：idle breathing、轻微重心移动、head movement、背包/服装摆动、walk/turn/stop、脚步尘土、草叶反馈。
+- 这些只是未来 CHAR-VS1 的视觉研究与原型候选；技术路线尚未锁定。可以比较原生 2D sprite animation 与 Blender 制作后渲染为 2D sprites；无须把游戏改为 3D。
+- 任何动画必须在实际 `384×216` viewport 下确认可读性与成本，避免制作看不见的细节。
+- **目前不授权**修改角色资产、移动方式、`astronaut.gd`、Phase 3 parallax、M04 内容或最终 Eden traversal。
+
+这项参考不改变 Bible Explorer 的视觉 DNA：**人很小，世界很大；安静、敬畏、希望。**
+
+---
+
 ## 十二、飞船 — 产品的心脏
 
 它必须感觉像：下班后回到家。暖光。安静。安全。
