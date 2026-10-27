@@ -575,6 +575,24 @@ VS1 不得：
 
 ---
 
+## 二十一、SCENE & ZONE DEVELOPMENT PROTOCOL V1.1
+
+本协议定义从已批准故事到可玩的 Scene 实现的顺序。具体执行、证据与 handoff 规则由 `DEVELOPMENT_MASTER.md` 管理。
+
+1. Story outline 必须先由 Gabriel 批准，才可进入详细 Zone 工作。
+2. 每个 Scene 划分为编号 Zones；Zone 编号本身不代表布局已获批准。
+3. ChatGPT 先提出 high-level Zone Map，明确目的、顺序与依赖。
+4. Gabriel 审核并批准 creative design；未获批准的提案保持 `PROPOSED`。
+5. 每个 Zone 在实现前必须有 Creative Report，说明互动、Scripture connection、叙事与视觉边界。
+6. Codex 只实现已批准的 bounded scope，并保护相关 Master Files 与既有系统。
+7. Runtime verification 与 Gabriel creator playtest 都是 milestone acceptance 的必要关卡。
+8. Canon 不得被静默修改；任何冲突或新决定必须显式提出并经相应 authority 批准。
+9. 优先完成可玩的端到端体验；不阻塞玩法与验收的 polish 记录为 debt，留到获批的后续 milestone。
+
+Gabriel 保留最终 creative authority。任何 Zone Map、尺寸、路径、互动或表现，在明确批准前都只是提案。
+
+---
+
 这份文件是锚点。
 当 AI 工具、合作者、或新的 session 失去方向——先回到这里。
 当你不确定一个设计决定是否正确——用第十八节的四个问题过滤。
