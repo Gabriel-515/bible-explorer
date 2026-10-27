@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 M04VS1State="*res://scripts/m04_vs1_state.gd"
+ChapterLoopState="*res://scripts/chapter_loop_state.gd"
 
 [display]
 
